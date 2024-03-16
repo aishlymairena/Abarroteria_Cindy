@@ -6,7 +6,7 @@
 
 <div class="container">
     <h1>Nuevo Empleado</h1>
- 
+
     <div class="row">
         <form method="post" asp-action="Insertar">
             <div class="row">
@@ -24,7 +24,7 @@
                 </div>
 
             </div>
-
+            <input asp-for="Id_Empleado" type="hidden" class="form-control" />
             <div class="form-group">
                 <label asp-for="Nombre" class="control-label"></label>
                 <input asp-for="Nombre" class="form-control" />
@@ -33,7 +33,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Apellido" class="control-label"></label>
-                <input asp-for="Apellido"class=" form-control" />
+                <input asp-for="Apellido" class=" form-control" />
                 <span asp-validation-for="Apellido" class="text-danger"></span>
 
             </div>
@@ -45,12 +45,19 @@
             </div>
             <div class="form-group">
                 <label asp-for="Contraseña" class="control-label"></label>
-                <input asp-for="Contraseña" class="form-control" />
+                <input asp-for="Contraseña" type="password" class="form-control" id="passwordField" />
                 <span asp-validation-for="Contraseña" class="text-danger"></span>
-
             </div>
             <div class="form-group">
+                <label asp-for="Contraseña2" class="control-label"> Confirmar Contraseña</label>
+                <input asp-for="Contraseña2" type="password" class="form-control" id="passwordField" />
+                <span asp-validation-for="Contraseña2" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-group">
                 <label for="start">Fecha:</label>
+                <br />
                 <input type="date" id="Fecha" name="Fecha"
                        value="@Convert.ToDateTime(Model.Fecha_Nacimiento).ToString("yyyy-MM-dd")" />
             </div>
@@ -66,14 +73,27 @@
                 <input asp-for="DNI" class="form-control" />
                 <span asp-validation-for="DNI" class="text-danger"></span>
 
+                <fieldset>
+                    <legend>Sexo:</legend>
+
+                    <div style="display: inline-block;">
+                        <input asp-for="Sexo" type="radio" value="Hombre" checked />
+                        <label asp-for="DNI">Hombre</label>
+                    </div>
+
+                    <divstyle ="display: inline-block;">
+                        <input asp-for="Sexo" type="radio" value="Mujer" checked />
+                        <label asp-for="DNI">Mujer</label>
+                    </divstyle>
+                </fieldset>
             </div>
-            <div class="form-group">
-                <label asp-for="Sexo" class="control-label"></label>
-                <select asp-for="Sexo" class="form-control">
-                    <option value="Hombre">Hombre</option>
-                    <option value="Mujer">Mujer</option>
-                </select>
-                </div>
+            <!--    <div class="form-group">
+                    <label asp-for="Sexo" class="control-label"></label>
+                    <select asp-for="Sexo" class="form-control">
+                        <option value="Hombre">Hombre</option>
+                        <option value="Mujer">Mujer</option>
+                    </select>
+                        </div>-->
             <div class="form-group">
                 <label asp-for="Direccion" class="control-label"></label>
                 <input asp-for="Direccion" class="form-control" />
@@ -83,7 +103,7 @@
 
 
             <div class="form-group">
-                <input type="submit" value="Agregar" class="btn-success" style="background-color: #94D3F6; color: black;"  />
+                <input type="submit" value="Agregar" class="btn-success" style="background-color: #94D3F6; color: black;" />
             </div>
 
 
@@ -92,4 +112,3 @@
     </div>
 
 </div>
-

@@ -32,8 +32,14 @@ namespace Abarroteria_Cindy.Controllers
         }
         [HttpPost]
         public IActionResult Insertar(EmpleadoVm empleado)
-        { //hola este es un comentario
-          //hola este es un comentario nuevo
+        {
+            if (!empleado.Validacion())
+            {
+                TempData["mensaje"] = "Todos los campos son Obligatorios y verifique la informacion de cada campo";
+
+                return View(empleado);
+                //hola este es un comentario
+            }
             Empleado nuevoempleado = new Empleado();
             nuevoempleado.Nombre = empleado.Nombre;
             nuevoempleado.Apellido = empleado.Apellido;

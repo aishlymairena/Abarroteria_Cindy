@@ -24,7 +24,7 @@
                 </div>
 
             </div>
-
+            <input asp-for="Id_Empleado" type="hidden" class="form-control" />
             <div class="form-group">
                 <label asp-for="Nombre" class="control-label"></label>
                 <input asp-for="Nombre" class="form-control" />
@@ -69,14 +69,20 @@
                 <span asp-validation-for="DNI" class="text-danger"></span>
 
             </div>
-  
-            <div class="form-group">
-                <label asp-for="Sexo" class="control-label"></label>
-                <select asp-for="Sexo" class="form-control">
-                    <option value="Hombre">Hombre</option>
-                    <option value="Mujer">Mujer</option>
-                </select>
-            </div>
+
+            <fieldset>
+                <legend>Sexo:</legend>
+
+                <div style="display: inline-block;">
+                    <input asp-for="Sexo" type="radio" value="Hombre" />
+                    <label asp-for="DNI">Hombre</label>
+                </div>
+
+                <divstyle ="display: inline-block;">
+                    <input asp-for="Sexo" type="radio" value="Mujer" />
+                    <label asp-for="DNI">Mujer</label>
+                </divstyle>
+            </fieldset>
             <div class="form-group">
                 <label asp-for="Direccion" class="control-label"></label>
                 <input asp-for="Direccion" class="form-control" />
