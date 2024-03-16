@@ -33,7 +33,7 @@ namespace Abarroteria_Cindy.Controllers
         [HttpPost]
         public IActionResult Insertar(EmpleadoVm empleado)
         { //hola este es un comentario
-          
+          //hola este es un comentario nuevo
             Empleado nuevoempleado = new Empleado();
             nuevoempleado.Nombre = empleado.Nombre;
             nuevoempleado.Apellido = empleado.Apellido;
