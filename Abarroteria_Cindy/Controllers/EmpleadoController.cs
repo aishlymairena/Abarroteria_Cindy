@@ -105,7 +105,7 @@ namespace Abarroteria_Cindy.Controllers
             var nuevoregistro = _context.Empelado.Where(w => w.Id_Empleado == registros.Id_Empleado).FirstOrDefault();
             nuevoregistro.Eliminado = true;
             _context.SaveChanges();
-            TempData["mensaje"] = "Eliminado Correctamente";
+            TempData["mensaje"] = "El registro fue eliminado Correctamente";
 
             return RedirectToAction("Index");
         }
