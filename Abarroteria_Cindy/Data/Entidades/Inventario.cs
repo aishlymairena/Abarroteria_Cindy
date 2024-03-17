@@ -9,11 +9,12 @@
         public Guid CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
         public bool Eliminado { get; set; }
-        public ICollection<Proveedor> Proveedores { get; set; }
+        public Guid Id_Proveedor { set; get; }
+        public Proveedor Proveedor { get; set; }
+        
         public ICollection<Producto> Productos { get; set; }
         public Inventario()
         {
-            Proveedores = new HashSet<Proveedor>();
             Productos = new HashSet<Producto>();
         }
     }

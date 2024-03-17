@@ -4,6 +4,7 @@ using Abarroteria_Cindy.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Abarroteria_Cindy.Migrations
 {
     [DbContext(typeof(AbarroteriaBdContext))]
-    partial class AbarroteriaBdContextModelSnapshot : ModelSnapshot
+    [Migration("20240317140859_Inventario")]
+    partial class Inventario
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,7 +38,7 @@ namespace Abarroteria_Cindy.Migrations
 
                     b.Property<string>("Descripcion")
                         .IsRequired()
-                        .HasColumnType("Varchar(255)")
+                        .HasColumnType("Varchar(25)")
                         .HasColumnName("Descripcion");
 
                     b.Property<bool>("Eliminado")
@@ -101,7 +103,7 @@ namespace Abarroteria_Cindy.Migrations
 
                     b.Property<string>("Nombre")
                         .IsRequired()
-                        .HasColumnType("Varchar(60)")
+                        .HasColumnType("Varchar(25)")
                         .HasColumnName("Nombre");
 
                     b.HasKey("Id_Categoria");
@@ -117,7 +119,7 @@ namespace Abarroteria_Cindy.Migrations
 
                     b.Property<string>("Apellido")
                         .IsRequired()
-                        .HasColumnType("Varchar(50)")
+                        .HasColumnType("Varchar(25)")
                         .HasColumnName("Apellido");
 
                     b.Property<Guid>("CreatedBy")
@@ -133,7 +135,7 @@ namespace Abarroteria_Cindy.Migrations
 
                     b.Property<string>("Direccion")
                         .IsRequired()
-                        .HasColumnType("Varchar(255)")
+                        .HasColumnType("Varchar(25)")
                         .HasColumnName("Direccion");
 
                     b.Property<bool>("Eliminado")
@@ -144,7 +146,7 @@ namespace Abarroteria_Cindy.Migrations
 
                     b.Property<string>("Nombre")
                         .IsRequired()
-                        .HasColumnType("Varchar(50)")
+                        .HasColumnType("Varchar(25)")
                         .HasColumnName("Nombre");
 
                     b.Property<string>("Sexo")
@@ -201,7 +203,7 @@ namespace Abarroteria_Cindy.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Apellido")
-                        .HasColumnType("Varchar(50)")
+                        .HasColumnType("Varchar(25)")
                         .HasColumnName("Apellido");
 
                     b.Property<string>("Contraseña")
@@ -221,7 +223,7 @@ namespace Abarroteria_Cindy.Migrations
                         .HasColumnName("DNI");
 
                     b.Property<string>("Direccion")
-                        .HasColumnType("Varchar(255)")
+                        .HasColumnType("Varchar(25)")
                         .HasColumnName("Direccion");
 
                     b.Property<bool>("Eliminado")
@@ -231,7 +233,7 @@ namespace Abarroteria_Cindy.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Nombre")
-                        .HasColumnType("Varchar(50)")
+                        .HasColumnType("Varchar(25)")
                         .HasColumnName("Nombre");
 
                     b.Property<Guid>("RolId")
@@ -370,7 +372,7 @@ namespace Abarroteria_Cindy.Migrations
 
                     b.Property<string>("Nombre")
                         .IsRequired()
-                        .HasColumnType("Varchar(60)")
+                        .HasColumnType("Varchar(25)")
                         .HasColumnName("Nombre");
 
                     b.HasKey("Id");
@@ -424,7 +426,7 @@ namespace Abarroteria_Cindy.Migrations
 
                     b.Property<string>("Descripcion")
                         .IsRequired()
-                        .HasColumnType("Varchar(255)")
+                        .HasColumnType("Varchar(25)")
                         .HasColumnName("Apellido");
 
                     b.Property<bool>("Eliminado")
@@ -438,7 +440,7 @@ namespace Abarroteria_Cindy.Migrations
 
                     b.Property<string>("Nombre")
                         .IsRequired()
-                        .HasColumnType("Varchar(60)")
+                        .HasColumnType("Varchar(25)")
                         .HasColumnName("Nombre");
 
                     b.Property<int>("Precio_Mayorista")
@@ -474,7 +476,7 @@ namespace Abarroteria_Cindy.Migrations
 
                     b.Property<string>("Direccion")
                         .IsRequired()
-                        .HasColumnType("Varchar(255)")
+                        .HasColumnType("Varchar(25)")
                         .HasColumnName("Direccion");
 
                     b.Property<bool>("Eliminado")
@@ -482,7 +484,7 @@ namespace Abarroteria_Cindy.Migrations
 
                     b.Property<string>("Nombre")
                         .IsRequired()
-                        .HasColumnType("Varchar(60)")
+                        .HasColumnType("Varchar(25)")
                         .HasColumnName("Nombre");
 
                     b.Property<int>("Telefono")
@@ -507,7 +509,7 @@ namespace Abarroteria_Cindy.Migrations
 
                     b.Property<string>("Descripcion")
                         .IsRequired()
-                        .HasColumnType("Varchar(255)")
+                        .HasColumnType("Varchar(25)")
                         .HasColumnName("Descripcion");
 
                     b.Property<bool>("Eliminado")
