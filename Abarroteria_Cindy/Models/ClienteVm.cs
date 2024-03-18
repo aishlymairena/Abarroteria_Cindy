@@ -9,6 +9,6 @@
         public DateTime Fecha_Nacimiento { get; set; }
         public int Telefono { get; set; }
         public string DNI { get; set; }
-        public bool Sexo { get; set; }
+        public string? Sexo { get; set; }
     }
 }

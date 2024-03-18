@@ -24,10 +24,10 @@
                 </div>
 
             </div>
-
+            <input asp-for="Id_Empleado" type="hidden" class="form-control" />
             <div class="form-group">
                 <label asp-for="Nombre" class="control-label"></label>
-                <input asp-for="Nombre" class="form-control" readonly/>
+                <input asp-for="Nombre" class="form-control" readonly />
                 <span asp-validation-for="Nombre" class="text-danger"></span>
 
             </div>
@@ -52,6 +52,7 @@
             </div>
             <div class="form-group">
                 <label for="start">Fecha de Nacimiento:</label>
+                <br />
                 <input type="date" id="Fecha" name="Fecha"
                        value="@Convert.ToDateTime(Model.Fecha_Nacimiento).ToString("yyyy-MM-dd")" readonly />
             </div>
@@ -68,11 +69,22 @@
                 <span asp-validation-for="DNI" class="text-danger"></span>
 
             </div>
-            <div class="form-group">
-                <label asp-for="Sexo" class="control-label"></label>
-                <select asp-for="Sexo" class="form-control" readonly>
-                </select>
-            </div>
+            <fieldset>
+                <legend>Sexo:</legend>
+
+                <div style="display: inline-block;">
+                    <input asp-for="Sexo" type="radio" value="Hombre" checked disabled />
+                    <label asp-for="Sexo" readonly>Hombre</label>
+                    <span asp-validation-for="Sexo" class="text-danger"></span>
+                </div>
+
+                <div style="display: inline-block;">
+                    <input asp-for="Sexo" type="radio" value="Mujer" disabled />
+                    <label asp-for="Sexo" readonly>Mujer</label>
+                    <span asp-validation-for="Sexo" class="text-danger"></span>
+                </div>
+            </fieldset>
+
             <div class="form-group">
                 <label asp-for="Direccion" class="control-label"></label>
                 <input asp-for="Direccion" class="form-control" readonly />
@@ -91,4 +103,3 @@
 
 
 </div>
-
