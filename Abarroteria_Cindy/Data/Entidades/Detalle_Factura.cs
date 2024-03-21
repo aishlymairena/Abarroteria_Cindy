@@ -1,4 +1,6 @@
-﻿namespace Abarroteria_Cindy.Data.Entidades
+﻿using Abarroteria_Cindy.Models;
+
+namespace Abarroteria_Cindy.Data.Entidades
 {
     public class Detalle_Factura
     {
@@ -14,4 +16,5 @@
         public Producto Producto { get; set; }
 
     }
+    
 }
