@@ -11,7 +11,7 @@ namespace Abarroteria_Cindy.Data
         public DbSet<Modulo> Modulo { get; set; }
         public DbSet<AgrupadoModulos> AgrupadoModulos { get; set; }
         public DbSet<ModulosRoles> ModulosRoles { get; set; }
-        public DbSet<Empleado> Empelado { get; set; }
+        public DbSet<Empleado> Empleado { get; set; }
         public DbSet<Encabezado_Factura> Encabezado_Factura { get; set; }
         public DbSet<CAI> CAI { get; set; }
         public DbSet<Cliente> Cliente { get; set; }
