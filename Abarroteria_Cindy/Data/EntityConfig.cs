@@ -1,6 +1,7 @@
 ﻿using Abarroteria_Cindy.Data.Entidades;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
 namespace Abarroteria_Cindy.Data
 {
@@ -110,8 +111,9 @@ namespace Abarroteria_Cindy.Data
             {
                 builder.HasKey(x => x.Id_Producto);
                 builder.Property(s => s.Nombre).HasColumnType("Varchar(60)").HasColumnName("Nombre");
-                builder.Property(s => s.Descripcion).HasColumnType("Varchar(255)").HasColumnName("Apellido");
+                builder.Property(s => s.Descripcion).HasColumnType("Varchar(255)").HasColumnName("Descripcion");
                 builder.HasMany(a => a.Detalles).WithOne(a => a.Producto).HasForeignKey(c => c.Id_Producto);
+                builder.HasMany(a => a.Inventarios).WithOne(a => a.Producto).HasForeignKey(c => c.Id_Producto).OnDelete(DeleteBehavior.NoAction); ; 
             }
 
         }
@@ -130,7 +132,7 @@ namespace Abarroteria_Cindy.Data
             public void Configure(EntityTypeBuilder<Inventario> builder)
             {
                 builder.HasKey(x => x.Id_Inventario);
-                builder.HasMany(a => a.Productos).WithOne(a => a.Inventario).HasForeignKey(c => c.Id_Inventario);
+               
             }
 
         }
