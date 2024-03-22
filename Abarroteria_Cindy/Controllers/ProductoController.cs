@@ -49,7 +49,7 @@ namespace Abarroteria_Cindy.Controllers
                 Precio_Normal = producto.Precio_Normal,
                 Precio_Mayorista = producto.Precio_Mayorista,
                 Id_Categoria = producto.Id_Categoria,
-                Id_Inventario = producto.Id_Inventario
+          
             };
 
             _context.Producto.Add(nuevoProducto);

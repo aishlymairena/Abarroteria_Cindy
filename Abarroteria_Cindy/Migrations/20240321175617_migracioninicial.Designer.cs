@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Abarroteria_Cindy.Migrations
 {
     [DbContext(typeof(AbarroteriaBdContext))]
-    [Migration("20240319052229_inicial3")]
-    partial class inicial3
+    [Migration("20240321175617_migracioninicial")]
+    partial class migracioninicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -249,7 +249,7 @@ namespace Abarroteria_Cindy.Migrations
 
                     b.HasIndex("RolId");
 
-                    b.ToTable("Empelado");
+                    b.ToTable("Empleado");
                 });
 
             modelBuilder.Entity("Abarroteria_Cindy.Data.Entidades.Encabezado_Factura", b =>
@@ -289,6 +289,10 @@ namespace Abarroteria_Cindy.Migrations
                     b.Property<int>("Monto_Entregado")
                         .HasColumnType("int");
 
+                    b.Property<string>("NumeroFactura")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("RTN")
                         .IsRequired()
                         .HasColumnType("Varchar(14)")
@@ -323,7 +327,10 @@ namespace Abarroteria_Cindy.Migrations
                     b.Property<bool>("Eliminado")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("Id_Proveedor")
+                    b.Property<Guid?>("Id_Producto")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("Id_Proveedor")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Stock_Actual")
@@ -336,6 +343,8 @@ namespace Abarroteria_Cindy.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id_Inventario");
+
+                    b.HasIndex("Id_Producto");
 
                     b.HasIndex("Id_Proveedor");
 
@@ -425,9 +434,8 @@ namespace Abarroteria_Cindy.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Descripcion")
-                        .IsRequired()
                         .HasColumnType("Varchar(255)")
-                        .HasColumnName("Apellido");
+                        .HasColumnName("Descripcion");
 
                     b.Property<bool>("Eliminado")
                         .HasColumnType("bit");
@@ -435,11 +443,7 @@ namespace Abarroteria_Cindy.Migrations
                     b.Property<Guid>("Id_Categoria")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("Id_Inventario")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Nombre")
-                        .IsRequired()
                         .HasColumnType("Varchar(60)")
                         .HasColumnName("Nombre");
 
@@ -452,8 +456,6 @@ namespace Abarroteria_Cindy.Migrations
                     b.HasKey("Id_Producto");
 
                     b.HasIndex("Id_Categoria");
-
-                    b.HasIndex("Id_Inventario");
 
                     b.ToTable("Producto");
                 });
@@ -579,11 +581,16 @@ namespace Abarroteria_Cindy.Migrations
 
             modelBuilder.Entity("Abarroteria_Cindy.Data.Entidades.Inventario", b =>
                 {
+                    b.HasOne("Abarroteria_Cindy.Data.Entidades.Producto", "Producto")
+                        .WithMany("Inventarios")
+                        .HasForeignKey("Id_Producto")
+                        .OnDelete(DeleteBehavior.NoAction);
+
                     b.HasOne("Abarroteria_Cindy.Data.Entidades.Proveedor", "Proveedor")
                         .WithMany("Inventarios")
-                        .HasForeignKey("Id_Proveedor")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("Id_Proveedor");
+
+                    b.Navigation("Producto");
 
                     b.Navigation("Proveedor");
                 });
@@ -626,15 +633,7 @@ namespace Abarroteria_Cindy.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Abarroteria_Cindy.Data.Entidades.Inventario", "Inventario")
-                        .WithMany("Productos")
-                        .HasForeignKey("Id_Inventario")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Categoria");
-
-                    b.Navigation("Inventario");
                 });
 
             modelBuilder.Entity("Abarroteria_Cindy.Data.Entidades.AgrupadoModulos", b =>
@@ -667,11 +666,6 @@ namespace Abarroteria_Cindy.Migrations
                     b.Navigation("Detalles");
                 });
 
-            modelBuilder.Entity("Abarroteria_Cindy.Data.Entidades.Inventario", b =>
-                {
-                    b.Navigation("Productos");
-                });
-
             modelBuilder.Entity("Abarroteria_Cindy.Data.Entidades.Modulo", b =>
                 {
                     b.Navigation("ModulosRoles");
@@ -680,6 +674,8 @@ namespace Abarroteria_Cindy.Migrations
             modelBuilder.Entity("Abarroteria_Cindy.Data.Entidades.Producto", b =>
                 {
                     b.Navigation("Detalles");
+
+                    b.Navigation("Inventarios");
                 });
 
             modelBuilder.Entity("Abarroteria_Cindy.Data.Entidades.Proveedor", b =>
