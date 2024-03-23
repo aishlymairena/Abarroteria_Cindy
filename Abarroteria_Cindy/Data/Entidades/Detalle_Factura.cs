@@ -1,4 +1,6 @@
-﻿namespace Abarroteria_Cindy.Data.Entidades
+﻿using Abarroteria_Cindy.Models;
+
+namespace Abarroteria_Cindy.Data.Entidades
 {
     public class Detalle_Factura
     {
@@ -10,10 +12,9 @@
         public bool Eliminado { get; set; }
         public Encabezado_Factura Encabezado_Factura { get; set; }
         public Guid Id_Encabezado_Factura { set; get; }
-        public ICollection<Producto> Productos { get; set; }
-        public Detalle_Factura()
-        {
-            Productos = new HashSet<Producto>();
-        }
+        public Guid Id_Producto { set; get; }
+        public Producto Producto { get; set; }
+
     }
+    
 }

@@ -20,7 +20,7 @@ namespace Abarroteria_Cindy.Controllers
         }
         public IActionResult Index()
         {
-            var empleado = _context.Empelado.Where(w => w.Eliminado == false).ProjectToType<EmpleadoVm>().ToList(); 
+            var empleado = _context.Empleado.Where(w => w.Eliminado == false).ProjectToType<EmpleadoVm>().ToList(); 
             return View(empleado);
         }
         [HttpGet]
@@ -30,6 +30,10 @@ namespace Abarroteria_Cindy.Controllers
             EmpleadoVm registros = new EmpleadoVm();
             return View(registros);
         }
+
+
+
+
         [HttpPost]
         public IActionResult Insertar(EmpleadoVm empleado)
         {
@@ -56,7 +60,7 @@ namespace Abarroteria_Cindy.Controllers
             nuevoempleado.Eliminado = false;
             nuevoempleado.Id_Empleado = Guid.NewGuid();
 
-            _context.Empelado.Add(nuevoempleado);
+            _context.Empleado.Add(nuevoempleado);
             _context.SaveChanges();
             TempData["mensaje"] = "Registrado Correctamente";
 
@@ -66,7 +70,7 @@ namespace Abarroteria_Cindy.Controllers
 
         public IActionResult Editar(Guid Id_Empleado)
         {
-            var registro = _context.Empelado
+            var registro = _context.Empleado
                                   .Where(w => w.Id_Empleado == Id_Empleado)
                                   .ProjectToType<EmpleadoVm>()
                                   .FirstOrDefault();
@@ -76,7 +80,7 @@ namespace Abarroteria_Cindy.Controllers
         [HttpPost]
         public IActionResult Editar(EmpleadoVm empleado)
         {
-            var nuevoempleado = _context.Empelado.FirstOrDefault(w => w.Id_Empleado == empleado.Id_Empleado);
+            var nuevoempleado = _context.Empleado.FirstOrDefault(w => w.Id_Empleado == empleado.Id_Empleado);
 
             nuevoempleado.Nombre = empleado.Nombre;
             nuevoempleado.Apellido = empleado.Apellido;
@@ -97,7 +101,7 @@ namespace Abarroteria_Cindy.Controllers
         public IActionResult Eliminar(Guid Id_Empleado)
         {
 
-            var registro = _context.Empelado
+            var registro = _context.Empleado
                                  .Where(w => w.Id_Empleado == Id_Empleado)
                                  .ProjectToType<EmpleadoVm>()
                                  .FirstOrDefault();
@@ -108,10 +112,10 @@ namespace Abarroteria_Cindy.Controllers
         public IActionResult Eliminar(EmpleadoVm registros)
         {
 
-            var nuevoregistro = _context.Empelado.Where(w => w.Id_Empleado == registros.Id_Empleado).FirstOrDefault();
+            var nuevoregistro = _context.Empleado.Where(w => w.Id_Empleado == registros.Id_Empleado).FirstOrDefault();
             nuevoregistro.Eliminado = true;
             _context.SaveChanges();
-            TempData["mensaje"] = "Eliminado Correctamente";
+            TempData["mensaje"] = "El registro fue eliminado Correctamente";
 
             return RedirectToAction("Index");
         }

@@ -1,6 +1,7 @@
 ﻿using Abarroteria_Cindy.Data.Entidades;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
 namespace Abarroteria_Cindy.Data
 {
@@ -11,7 +12,7 @@ namespace Abarroteria_Cindy.Data
             public void Configure(EntityTypeBuilder<Rol> builder)
             {
                 builder.HasKey(x => x.Id);
-                builder.Property(s => s.Descripcion).HasColumnType("Varchar(25)").HasColumnName("Descripcion");
+                builder.Property(s => s.Descripcion).HasColumnType("Varchar(255)").HasColumnName("Descripcion");
                 builder.HasMany(a => a.ModulosRoles).WithOne(a => a.Rol).HasForeignKey(c => c.RolId);
                 builder.HasMany(a => a.Empleados).WithOne(a => a.Rol).HasForeignKey(c => c.RolId);
             }
@@ -22,7 +23,7 @@ namespace Abarroteria_Cindy.Data
             public void Configure(EntityTypeBuilder<Modulo> builder)
             {
                 builder.HasKey(x => x.Id);
-                builder.Property(s => s.Nombre).HasColumnType("Varchar(25)").HasColumnName("Nombre");
+                builder.Property(s => s.Nombre).HasColumnType("Varchar(60)").HasColumnName("Nombre");
                 builder.Property(s => s.Metodo).HasColumnType("Varchar(25)").HasColumnName("Metodo");
                 builder.Property(s => s.Controller).HasColumnType("Varchar(25)").HasColumnName("Controller");
                 builder.HasMany(a => a.ModulosRoles).WithOne(a => a.Modulo).HasForeignKey(c => c.ModuloId);
@@ -43,7 +44,7 @@ namespace Abarroteria_Cindy.Data
             public void Configure(EntityTypeBuilder<AgrupadoModulos> builder)
             {
                 builder.HasKey(x => x.Id);
-                builder.Property(s => s.Descripcion).HasColumnType("Varchar(25)").HasColumnName("Descripcion");
+                builder.Property(s => s.Descripcion).HasColumnType("Varchar(255)").HasColumnName("Descripcion");
                 builder.HasMany(a => a.Modulos).WithOne(a => a.AgrupadoModulos).HasForeignKey(c => c.AgrupadoModulosId);
             }
 
@@ -53,9 +54,9 @@ namespace Abarroteria_Cindy.Data
             public void Configure(EntityTypeBuilder<Empleado> builder)
             {
                 builder.HasKey(x => x.Id_Empleado);
-                builder.Property(s => s.Nombre).HasColumnType("Varchar(25)").HasColumnName("Nombre");
-                builder.Property(s => s.Apellido).HasColumnType("Varchar(25)").HasColumnName("Apellido");
-                builder.Property(s => s.Direccion).HasColumnType("Varchar(25)").HasColumnName("Direccion");
+                builder.Property(s => s.Nombre).HasColumnType("Varchar(50)").HasColumnName("Nombre");
+                builder.Property(s => s.Apellido).HasColumnType("Varchar(50)").HasColumnName("Apellido");
+                builder.Property(s => s.Direccion).HasColumnType("Varchar(255)").HasColumnName("Direccion");
                 builder.Property(s => s.DNI).HasColumnType("Varchar(13)").HasColumnName("DNI");
                 builder.HasMany(a => a.Encabezados).WithOne(a => a.Empleado).HasForeignKey(c => c.Id_Empleado);
             }
@@ -87,9 +88,9 @@ namespace Abarroteria_Cindy.Data
             public void Configure(EntityTypeBuilder<Cliente> builder)
             {
                 builder.HasKey(x => x.Id_Cliente);
-                builder.Property(s => s.Nombre).HasColumnType("Varchar(25)").HasColumnName("Nombre");
-                builder.Property(s => s.Apellido).HasColumnType("Varchar(25)").HasColumnName("Apellido");
-                builder.Property(s => s.Direccion).HasColumnType("Varchar(25)").HasColumnName("Direccion");
+                builder.Property(s => s.Nombre).HasColumnType("Varchar(50)").HasColumnName("Nombre");
+                builder.Property(s => s.Apellido).HasColumnType("Varchar(50)").HasColumnName("Apellido");
+                builder.Property(s => s.Direccion).HasColumnType("Varchar(255)").HasColumnName("Direccion");
                 builder.Property(s => s.DNI).HasColumnType("Varchar(13)").HasColumnName("DNI");
                 builder.HasMany(a => a.Encabezados).WithOne(a => a.Cliente).HasForeignKey(c => c.Id_Cliente);
             }
@@ -100,7 +101,7 @@ namespace Abarroteria_Cindy.Data
             public void Configure(EntityTypeBuilder<Detalle_Factura> builder)
             {
                 builder.HasKey(x => x.Id_Detalle_Factura);
-                builder.HasMany(a => a.Productos).WithOne(a => a.Detalle_Factura).HasForeignKey(c => c.Id_Detalle_Factura);
+
             }
 
         }
@@ -109,8 +110,10 @@ namespace Abarroteria_Cindy.Data
             public void Configure(EntityTypeBuilder<Producto> builder)
             {
                 builder.HasKey(x => x.Id_Producto);
-                builder.Property(s => s.Nombre).HasColumnType("Varchar(25)").HasColumnName("Nombre");
-                builder.Property(s => s.Descripcion).HasColumnType("Varchar(25)").HasColumnName("Apellido");
+                builder.Property(s => s.Nombre).HasColumnType("Varchar(60)").HasColumnName("Nombre");
+                builder.Property(s => s.Descripcion).HasColumnType("Varchar(255)").HasColumnName("Descripcion");
+                builder.HasMany(a => a.Detalles).WithOne(a => a.Producto).HasForeignKey(c => c.Id_Producto);
+                builder.HasMany(a => a.Inventarios).WithOne(a => a.Producto).HasForeignKey(c => c.Id_Producto).OnDelete(DeleteBehavior.NoAction); ; 
             }
 
         }
@@ -119,7 +122,7 @@ namespace Abarroteria_Cindy.Data
             public void Configure(EntityTypeBuilder<Categoria> builder)
             {
                 builder.HasKey(x => x.Id_Categoria);
-                builder.Property(s => s.Nombre).HasColumnType("Varchar(25)").HasColumnName("Nombre");
+                builder.Property(s => s.Nombre).HasColumnType("Varchar(60)").HasColumnName("Nombre");
                 builder.HasMany(a => a.Productos).WithOne(a => a.Categoria).HasForeignKey(c => c.Id_Categoria);
             }
 
@@ -129,8 +132,7 @@ namespace Abarroteria_Cindy.Data
             public void Configure(EntityTypeBuilder<Inventario> builder)
             {
                 builder.HasKey(x => x.Id_Inventario);
-                builder.HasMany(a => a.Productos).WithOne(a => a.Inventario).HasForeignKey(c => c.Id_Inventario);
-                builder.HasMany(a => a.Proveedores).WithOne(a => a.Inventario).HasForeignKey(c => c.Id_Inventario);
+               
             }
 
         }
@@ -139,8 +141,9 @@ namespace Abarroteria_Cindy.Data
             public void Configure(EntityTypeBuilder<Proveedor> builder)
             {
                 builder.HasKey(x => x.Id_Proveedor);
-                builder.Property(s => s.Nombre).HasColumnType("Varchar(25)").HasColumnName("Nombre");
-                builder.Property(s => s.Direccion).HasColumnType("Varchar(25)").HasColumnName("Direccion");
+                builder.HasMany(a => a.Inventarios).WithOne(a => a.Proveedor).HasForeignKey(c => c.Id_Proveedor);
+                builder.Property(s => s.Nombre).HasColumnType("Varchar(60)").HasColumnName("Nombre");
+                builder.Property(s => s.Direccion).HasColumnType("Varchar(255)").HasColumnName("Direccion");
             }
 
         }

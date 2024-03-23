@@ -1,4 +1,6 @@
-﻿namespace Abarroteria_Cindy.Data.Entidades
+﻿using Abarroteria_Cindy.Models;
+
+namespace Abarroteria_Cindy.Data.Entidades
 {
     public class Proveedor
     {
@@ -10,9 +12,12 @@
         public Guid CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
         public bool Eliminado { get; set; }
-        public Guid Id_Inventario { set; get; }
-        public Inventario Inventario { get; set; }
+        public ICollection<Inventario> Inventarios { get; set; }
 
+        public Proveedor()
+        {
+            Inventarios = new HashSet<Inventario>();
+        }
 
     }
 }

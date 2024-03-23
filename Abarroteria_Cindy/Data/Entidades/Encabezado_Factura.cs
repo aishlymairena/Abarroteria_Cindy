@@ -4,6 +4,7 @@
     {
         public Guid Id_Encabezado_factura { get; set; }
         public DateTime Fecha_Emision { get; set; }
+        public string NumeroFactura { get; set; }
         public string RTN { get; set; }
         public int Total { get; set; }
         public int Monto_Entregado { get; set; }
