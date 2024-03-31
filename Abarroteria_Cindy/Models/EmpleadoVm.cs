@@ -32,45 +32,20 @@ namespace Abarroteria_Cindy.Models
             {
                 return false;
             }
-            if (Fecha_Nacimiento != null)
-            {
-                DateTime fechaNacimiento;
-                if (DateTime.TryParse(Fecha_Nacimiento.ToString(), out fechaNacimiento))
-                {
-                    // Calcular la edad actual
-                    int edad = DateTime.Today.Year - fechaNacimiento.Year;
-                    if (DateTime.Today < fechaNacimiento.AddYears(edad))
-                    {
-                        edad--;
-                    }
 
-                    // Comprobar si la edad está dentro del rango
-                    if (edad < 15 || edad > 50)
-                    {
-                        // La edad no está dentro del rango permitido
-                        return false;
-                    }
-                }
-                else
-                {
-                    // La fecha de nacimiento introducida no es válida
-                    return false;
-                }
-            }
-
-            if (Telefono.ToString().Length != 8 || Telefono != null)
+          /*  if (Telefono != null)
             {
                 return false;
             }
-            if (DNI.Length != 13 || DNI != null)
+            if (DNI != null)
             {
                 return false;
-            }
+            } */
             if (string.IsNullOrEmpty(Sexo))
             {
                 return false;
             }
-            if (string.IsNullOrEmpty(Correo) || !Regex.IsMatch(Correo, @"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"))
+            if (string.IsNullOrEmpty(Correo))
             {
                 return false;
             }
@@ -78,7 +53,7 @@ namespace Abarroteria_Cindy.Models
             {
                 return false;
             }
-            if (string.IsNullOrEmpty(Contraseña) || Contraseña != Contraseña2)
+            if (string.IsNullOrEmpty(Contraseña))
             {
                 return false;
             }

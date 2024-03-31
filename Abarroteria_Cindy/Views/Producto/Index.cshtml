@@ -34,8 +34,6 @@
                     <th>Precio Normal</th>
                     <th>Precio Mayorista</th>
                     <th>Categoría</th>
-                    <th>Inventario</th>
-                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -47,7 +45,7 @@
                         <td>@item.Precio_Normal</td>
                         <td>@item.Precio_Mayorista</td>
                         <td>@item.Categoria.Nombre</td>
-                        <td>@item.Inventario.Stock_Actual</td>
+                        
                         <td>
                             @Html.ActionLink("Editar", "Editar", "Producto", new { @Id_Producto = item.Id_Producto }, new { @class = "btn btn-info" })
                             @Html.ActionLink("Eliminar", "Eliminar", "Producto", new { @Id_Producto = item.Id_Producto }, new { @class = "btn btn-info" })

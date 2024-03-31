@@ -10,5 +10,30 @@
         public int Telefono { get; set; }
         public string DNI { get; set; }
         public string? Sexo { get; set; }
+
+
+
+        public bool Validacion()
+        {
+            if (string.IsNullOrEmpty(Nombre))
+            {
+                return false;
+            }
+            if (string.IsNullOrEmpty(Apellido))
+            {
+                return false;
+            }
+            if (string.IsNullOrEmpty(Direccion))
+            {
+                return false;
+            }
+
+
+
+            return true;
+        }
     }
+
+
+
 }

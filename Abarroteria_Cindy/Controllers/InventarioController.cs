@@ -5,6 +5,7 @@ using Mapster;
 using System;
 using System.Linq;
 using Abarroteria_Cindy.Data.Entidades;
+using Microsoft.Win32;
 
 namespace Abarroteria_Cindy.Controllers
 {
@@ -21,9 +22,8 @@ namespace Abarroteria_Cindy.Controllers
 
         public IActionResult Index()
         {
-            var inventarios = _context.Inventario.ToList();
-            var inventarioViewModels = inventarios.Adapt<List<InventarioVm>>();
-            return View(inventarioViewModels);
+            var inventario = _context.Inventario.Where(w => w.Eliminado == false).ProjectToType<InventarioVm>().ToList();
+            return View(inventario);
         }
 
         [HttpGet]

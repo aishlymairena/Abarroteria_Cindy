@@ -1,4 +1,4 @@
-﻿using Abarroteria_Cindy.Data.Entidades;
+﻿//using Abarroteria_Cindy.Data.Entidades;
 
 namespace Abarroteria_Cindy.Models
 {
@@ -11,7 +11,5 @@ namespace Abarroteria_Cindy.Models
         public int Precio_Mayorista { get; set; }
         public Guid Id_Categoria { set; get; }
         public CategoriaVm Categoria { get; set; }
-        public Guid Id_Inventario { set; get; }
-        public InventarioVm Inventario { get; set; }
     }
 }

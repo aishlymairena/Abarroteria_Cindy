@@ -29,19 +29,24 @@
         <table class="table table-bordered table-striped">
             <thead>
                 <tr>
-                    <th>ID Inventario</th>
-                    <th>Cantidad</th>
-                    <!-- Agrega aquí más encabezados si es necesario -->
-                    <th>Acciones</th>
+                    <th>Producto</th>
+                    <th>Stock Actual</th>
+                    <th>Stock Minimo</th>
+                    <th>Stock Maximo</th>
+                    <th>Proveedor</th>
+                 
                 </tr>
             </thead>
             <tbody>
                 @foreach (var item in Model)
                 {
                     <tr>
-                        <td>@item.Id_Inventario</td>
+                        <td>@item.Producto.Nombre</td>
+                        <td>@item.Stock_Actual</td>
+                        <td>@item.Stock_Minimo</td>
                         <td>@item.Stock_Maximo</td>
-                        <!-- Agrega aquí más columnas si es necesario -->
+                        <td>@item.Proveedor.Nombre</td>
+                       
                         <td>
                             @Html.ActionLink("Editar", "Editar", "Inventario", new { @Id_Inventario = item.Id_Inventario }, new { @class = "btn btn-info" })
                             @Html.ActionLink("Eliminar", "Eliminar", "Inventario", new { @Id_Inventario = item.Id_Inventario }, new { @class = "btn btn-info" })

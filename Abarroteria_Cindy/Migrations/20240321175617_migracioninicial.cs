@@ -14,7 +14,7 @@ namespace Abarroteria_Cindy.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Descripcion = table.Column<string>(type: "Varchar(25)", nullable: false),
+                    Descripcion = table.Column<string>(type: "Varchar(255)", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Eliminado = table.Column<bool>(type: "bit", nullable: false)
@@ -48,7 +48,7 @@ namespace Abarroteria_Cindy.Migrations
                 columns: table => new
                 {
                     Id_Categoria = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Nombre = table.Column<string>(type: "Varchar(25)", nullable: false),
+                    Nombre = table.Column<string>(type: "Varchar(60)", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Eliminado = table.Column<bool>(type: "bit", nullable: false)
@@ -63,13 +63,13 @@ namespace Abarroteria_Cindy.Migrations
                 columns: table => new
                 {
                     Id_Cliente = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Nombre = table.Column<string>(type: "Varchar(25)", nullable: false),
-                    Apellido = table.Column<string>(type: "Varchar(25)", nullable: false),
-                    Direccion = table.Column<string>(type: "Varchar(25)", nullable: false),
+                    Nombre = table.Column<string>(type: "Varchar(50)", nullable: false),
+                    Apellido = table.Column<string>(type: "Varchar(50)", nullable: false),
+                    Direccion = table.Column<string>(type: "Varchar(255)", nullable: false),
                     Fecha_Nacimiento = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Telefono = table.Column<int>(type: "int", nullable: false),
                     DNI = table.Column<string>(type: "Varchar(13)", nullable: false),
-                    Sexo = table.Column<bool>(type: "bit", nullable: false),
+                    Sexo = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Eliminado = table.Column<bool>(type: "bit", nullable: false)
@@ -80,20 +80,21 @@ namespace Abarroteria_Cindy.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Inventario",
+                name: "Proveedor",
                 columns: table => new
                 {
-                    Id_Inventario = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Stock_Actual = table.Column<int>(type: "int", nullable: false),
-                    Stock_Minimo = table.Column<int>(type: "int", nullable: false),
-                    Stock_Maximo = table.Column<int>(type: "int", nullable: false),
+                    Id_Proveedor = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Nombre = table.Column<string>(type: "Varchar(60)", nullable: false),
+                    Telefono = table.Column<int>(type: "int", nullable: false),
+                    Correo = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Direccion = table.Column<string>(type: "Varchar(255)", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Eliminado = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Inventario", x => x.Id_Inventario);
+                    table.PrimaryKey("PK_Proveedor", x => x.Id_Proveedor);
                 });
 
             migrationBuilder.CreateTable(
@@ -101,7 +102,7 @@ namespace Abarroteria_Cindy.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Descripcion = table.Column<string>(type: "Varchar(25)", nullable: false),
+                    Descripcion = table.Column<string>(type: "Varchar(255)", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Eliminado = table.Column<bool>(type: "bit", nullable: false)
@@ -116,7 +117,7 @@ namespace Abarroteria_Cindy.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Nombre = table.Column<string>(type: "Varchar(25)", nullable: false),
+                    Nombre = table.Column<string>(type: "Varchar(60)", nullable: false),
                     Metodo = table.Column<string>(type: "Varchar(25)", nullable: false),
                     Controller = table.Column<string>(type: "Varchar(25)", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -136,44 +137,44 @@ namespace Abarroteria_Cindy.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Proveedor",
+                name: "Producto",
                 columns: table => new
                 {
-                    Id_Proveedor = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Nombre = table.Column<string>(type: "Varchar(25)", nullable: false),
-                    Telefono = table.Column<int>(type: "int", nullable: false),
-                    Correo = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Direccion = table.Column<string>(type: "Varchar(25)", nullable: false),
+                    Id_Producto = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Nombre = table.Column<string>(type: "Varchar(60)", nullable: true),
+                    Descripcion = table.Column<string>(type: "Varchar(255)", nullable: true),
+                    Precio_Normal = table.Column<int>(type: "int", nullable: false),
+                    Precio_Mayorista = table.Column<int>(type: "int", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Eliminado = table.Column<bool>(type: "bit", nullable: false),
-                    Id_Inventario = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Id_Categoria = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Proveedor", x => x.Id_Proveedor);
+                    table.PrimaryKey("PK_Producto", x => x.Id_Producto);
                     table.ForeignKey(
-                        name: "FK_Proveedor_Inventario_Id_Inventario",
-                        column: x => x.Id_Inventario,
-                        principalTable: "Inventario",
-                        principalColumn: "Id_Inventario",
+                        name: "FK_Producto_Categoria_Id_Categoria",
+                        column: x => x.Id_Categoria,
+                        principalTable: "Categoria",
+                        principalColumn: "Id_Categoria",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Empelado",
+                name: "Empleado",
                 columns: table => new
                 {
                     Id_Empleado = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Nombre = table.Column<string>(type: "Varchar(25)", nullable: false),
-                    Apellido = table.Column<string>(type: "Varchar(25)", nullable: false),
-                    Direccion = table.Column<string>(type: "Varchar(25)", nullable: false),
+                    Nombre = table.Column<string>(type: "Varchar(50)", nullable: true),
+                    Apellido = table.Column<string>(type: "Varchar(50)", nullable: true),
+                    Direccion = table.Column<string>(type: "Varchar(255)", nullable: true),
                     Fecha_Nacimiento = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Telefono = table.Column<int>(type: "int", nullable: false),
-                    DNI = table.Column<string>(type: "Varchar(13)", nullable: false),
-                    Sexo = table.Column<bool>(type: "bit", nullable: false),
-                    Correo = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Contraseña = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DNI = table.Column<string>(type: "Varchar(13)", nullable: true),
+                    Sexo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Correo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Contraseña = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Eliminado = table.Column<bool>(type: "bit", nullable: false),
@@ -181,9 +182,9 @@ namespace Abarroteria_Cindy.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Empelado", x => x.Id_Empleado);
+                    table.PrimaryKey("PK_Empleado", x => x.Id_Empleado);
                     table.ForeignKey(
-                        name: "FK_Empelado_Rol_RolId",
+                        name: "FK_Empleado_Rol_RolId",
                         column: x => x.RolId,
                         principalTable: "Rol",
                         principalColumn: "Id",
@@ -219,11 +220,41 @@ namespace Abarroteria_Cindy.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Inventario",
+                columns: table => new
+                {
+                    Id_Inventario = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Stock_Actual = table.Column<int>(type: "int", nullable: false),
+                    Stock_Minimo = table.Column<int>(type: "int", nullable: false),
+                    Stock_Maximo = table.Column<int>(type: "int", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Eliminado = table.Column<bool>(type: "bit", nullable: false),
+                    Id_Proveedor = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Id_Producto = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Inventario", x => x.Id_Inventario);
+                    table.ForeignKey(
+                        name: "FK_Inventario_Producto_Id_Producto",
+                        column: x => x.Id_Producto,
+                        principalTable: "Producto",
+                        principalColumn: "Id_Producto");
+                    table.ForeignKey(
+                        name: "FK_Inventario_Proveedor_Id_Proveedor",
+                        column: x => x.Id_Proveedor,
+                        principalTable: "Proveedor",
+                        principalColumn: "Id_Proveedor");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Encabezado_Factura",
                 columns: table => new
                 {
                     Id_Encabezado_factura = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Fecha_Emision = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    NumeroFactura = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DNI = table.Column<string>(type: "Varchar(14)", nullable: false),
                     Total = table.Column<int>(type: "int", nullable: false),
                     Monto_Entregado = table.Column<int>(type: "int", nullable: false),
@@ -252,9 +283,9 @@ namespace Abarroteria_Cindy.Migrations
                         principalColumn: "Id_Cliente",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Encabezado_Factura_Empelado_Id_Empleado",
+                        name: "FK_Encabezado_Factura_Empleado_Id_Empleado",
                         column: x => x.Id_Empleado,
-                        principalTable: "Empelado",
+                        principalTable: "Empleado",
                         principalColumn: "Id_Empleado",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -269,7 +300,8 @@ namespace Abarroteria_Cindy.Migrations
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Eliminado = table.Column<bool>(type: "bit", nullable: false),
-                    Id_Encabezado_Factura = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Id_Encabezado_Factura = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id_Producto = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -280,44 +312,11 @@ namespace Abarroteria_Cindy.Migrations
                         principalTable: "Encabezado_Factura",
                         principalColumn: "Id_Encabezado_factura",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Producto",
-                columns: table => new
-                {
-                    Id_Producto = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Nombre = table.Column<string>(type: "Varchar(25)", nullable: false),
-                    Apellido = table.Column<string>(type: "Varchar(25)", nullable: false),
-                    Precio_Normal = table.Column<int>(type: "int", nullable: false),
-                    Precio_Mayorista = table.Column<int>(type: "int", nullable: false),
-                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Eliminado = table.Column<bool>(type: "bit", nullable: false),
-                    Id_Detalle_Factura = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Id_Categoria = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Id_Inventario = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Producto", x => x.Id_Producto);
                     table.ForeignKey(
-                        name: "FK_Producto_Categoria_Id_Categoria",
-                        column: x => x.Id_Categoria,
-                        principalTable: "Categoria",
-                        principalColumn: "Id_Categoria",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Producto_Detalle_Factura_Id_Detalle_Factura",
-                        column: x => x.Id_Detalle_Factura,
-                        principalTable: "Detalle_Factura",
-                        principalColumn: "Id_Detalle_Factura",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Producto_Inventario_Id_Inventario",
-                        column: x => x.Id_Inventario,
-                        principalTable: "Inventario",
-                        principalColumn: "Id_Inventario",
+                        name: "FK_Detalle_Factura_Producto_Id_Producto",
+                        column: x => x.Id_Producto,
+                        principalTable: "Producto",
+                        principalColumn: "Id_Producto",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -327,8 +326,13 @@ namespace Abarroteria_Cindy.Migrations
                 column: "Id_Encabezado_Factura");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Empelado_RolId",
-                table: "Empelado",
+                name: "IX_Detalle_Factura_Id_Producto",
+                table: "Detalle_Factura",
+                column: "Id_Producto");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Empleado_RolId",
+                table: "Empleado",
                 column: "RolId");
 
             migrationBuilder.CreateIndex(
@@ -345,6 +349,16 @@ namespace Abarroteria_Cindy.Migrations
                 name: "IX_Encabezado_Factura_Id_Empleado",
                 table: "Encabezado_Factura",
                 column: "Id_Empleado");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Inventario_Id_Producto",
+                table: "Inventario",
+                column: "Id_Producto");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Inventario_Id_Proveedor",
+                table: "Inventario",
+                column: "Id_Proveedor");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Modulo_AgrupadoModulosId",
@@ -365,27 +379,21 @@ namespace Abarroteria_Cindy.Migrations
                 name: "IX_Producto_Id_Categoria",
                 table: "Producto",
                 column: "Id_Categoria");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Producto_Id_Detalle_Factura",
-                table: "Producto",
-                column: "Id_Detalle_Factura");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Producto_Id_Inventario",
-                table: "Producto",
-                column: "Id_Inventario");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Proveedor_Id_Inventario",
-                table: "Proveedor",
-                column: "Id_Inventario");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Detalle_Factura");
+
+            migrationBuilder.DropTable(
+                name: "Inventario");
+
+            migrationBuilder.DropTable(
                 name: "ModulosRoles");
+
+            migrationBuilder.DropTable(
+                name: "Encabezado_Factura");
 
             migrationBuilder.DropTable(
                 name: "Producto");
@@ -397,28 +405,19 @@ namespace Abarroteria_Cindy.Migrations
                 name: "Modulo");
 
             migrationBuilder.DropTable(
-                name: "Categoria");
-
-            migrationBuilder.DropTable(
-                name: "Detalle_Factura");
-
-            migrationBuilder.DropTable(
-                name: "Inventario");
-
-            migrationBuilder.DropTable(
-                name: "AgrupadoModulos");
-
-            migrationBuilder.DropTable(
-                name: "Encabezado_Factura");
-
-            migrationBuilder.DropTable(
                 name: "CAI");
 
             migrationBuilder.DropTable(
                 name: "Cliente");
 
             migrationBuilder.DropTable(
-                name: "Empelado");
+                name: "Empleado");
+
+            migrationBuilder.DropTable(
+                name: "Categoria");
+
+            migrationBuilder.DropTable(
+                name: "AgrupadoModulos");
 
             migrationBuilder.DropTable(
                 name: "Rol");
