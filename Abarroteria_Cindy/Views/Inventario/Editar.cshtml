@@ -1,6 +1,6 @@
-﻿@model InventarioVm
+﻿@model Abarroteria_Cindy.Models.InventarioVm
 @{
-    ViewData["Title"] = "Editar";
+    ViewData["Title"] = "Editar Inventario";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -15,26 +15,46 @@
                     {
                         <div class="alert alert-warning alert-dismissible" role="alert">
                             <p> @TempData["mensaje"]</p>
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                     }
                 </div>
             </div>
-
             <input asp-for="Id_Inventario" type="hidden" class="form-control" />
-
             <div class="form-group">
-                <label asp-for="Stock_Maximo" class="control-label"></label>
+                <label asp-for="Stock_Actual" class="control-label"></label>
                 <input asp-for="Stock_Actual" class="form-control" />
                 <span asp-validation-for="Stock_Actual" class="text-danger"></span>
             </div>
 
-            <!-- Agrega aquí más campos del inventario si es necesario -->
+            <div class="form-group">
+                <label asp-for="Stock_Minimo" class="control-label"></label>
+                <input asp-for="Stock_Minimo" class="form-control" />
+                <span asp-validation-for="Stock_Minimo" class="text-danger"></span>
+            </div>
 
             <div class="form-group">
-                <input type="submit" value="Editar" class="btn btn-success" style="color: #000; background-color: #0dcaf0; border-color: #0dcaf0;" />
+                <label asp-for="Stock_Maximo" class="control-label"></label>
+                <input asp-for="Stock_Maximo" class="form-control" />
+                <span asp-validation-for="Stock_Maximo" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Id_Proveedor" class="control-label">Proveedor</label>
+                <select asp-for="Id_Proveedor" class="form-control" asp-items="@(new SelectList(ViewBag.Proveedores, "Id_Proveedor", "Nombre"))"></select>
+                <span asp-validation-for="Id_Proveedor" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Id_Producto" class="control-label">Producto</label>
+                <select asp-for="Id_Producto" class="form-control" asp-items="@(new SelectList(ViewBag.Productos, "Id_Producto", "Nombre"))"></select>
+                <span asp-validation-for="Id_Producto" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Editar" class="btn btn-success" />
             </div>
         </form>
     </div>

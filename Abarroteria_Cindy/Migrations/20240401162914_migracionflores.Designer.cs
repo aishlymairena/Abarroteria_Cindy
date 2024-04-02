@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Abarroteria_Cindy.Migrations
 {
     [DbContext(typeof(AbarroteriaBdContext))]
-    [Migration("20240321175617_migracioninicial")]
-    partial class migracioninicial
+    [Migration("20240401162914_migracionflores")]
+    partial class migracionflores
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
