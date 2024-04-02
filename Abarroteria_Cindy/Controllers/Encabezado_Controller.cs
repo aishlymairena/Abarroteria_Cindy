@@ -150,9 +150,15 @@ namespace Abarroteria_Cindy.Controllers
                                       .Include(e => e.Detalles)
                                       .SingleOrDefault(e => e.Id_Encabezado_factura == encabezadoVmParametro.Id_Encabezado_factura);
 
+            if (encabezado == null)
+            {
+                // Manejar el caso en que no se encuentre ningún encabezado
+                return NotFound(); // O devuelve una vista personalizada para indicar que no se encontró el encabezado
+            }
+
             var encabezadoVm = new EncabezadoVm
             {
-                // Mapear las propiedades del encabezado a la vista modelo correspondiente (EncabezadoVm)
+                
                 Id_Encabezado_factura = encabezado.Id_Encabezado_factura,
                 Fecha_Emision = encabezado.Fecha_Emision,
                 RTN = encabezado.RTN,
@@ -162,7 +168,7 @@ namespace Abarroteria_Cindy.Controllers
                 Cambio = encabezado.Cambio,
                 Impuesto = encabezado.Impuesto,
                 Id_Empleado = encabezado.Id_Empleado,
-                Empleado = new EmpleadoVm { Nombre = encabezado.Empleado.Nombre }, // Mapear solo el nombre del empleado
+                Empleado = new EmpleadoVm { Nombre = encabezado.Empleado.Nombre }, 
                 Id_Cliente = encabezado.Id_Cliente,
                 Cliente = new ClienteVm { Nombre = encabezado.Cliente.Nombre }, // Mapear solo el nombre del cliente
                 Id_Cai = encabezado.Id_Cai,
