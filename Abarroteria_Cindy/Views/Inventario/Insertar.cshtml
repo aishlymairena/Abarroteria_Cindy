@@ -1,6 +1,6 @@
 ﻿@model InventarioVm
 @{
-    ViewData["Title"] = "Insertar";
+    ViewData["Title"] = "Insertar Inventario";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -24,18 +24,50 @@
             </div>
 
             <div class="form-group">
-                <label asp-for="Id_Inventario" class="control-label"></label>
-                <input asp-for="Id_Inventario" class="form-control" />
-                <span asp-validation-for="Id_Inventario" class="text-danger"></span>
+                <label for="StockActual">Stock Actual:</label>
+                <input id="StockActual" name="Stock_Actual" type="number" class="form-control" />
+                @* No se necesita Validación para el stock actual ya que podría ser 0 o mayor *@
             </div>
 
             <div class="form-group">
-                <label asp-for="Stock_Maximo" class="control-label"></label>
-                <input asp-for="Stock_Maximo" class="form-control" />
-                <span asp-validation-for="Stock_Maximo" class="text-danger"></span>
+                <label for="StockMinimo">Stock Mínimo:</label>
+                <input id="StockMinimo" name="Stock_Minimo" type="number" class="form-control" />
+                @Html.ValidationMessageFor(model => model.Stock_Minimo, "", new { @class = "text-danger" })
             </div>
 
-            <!-- Agrega más campos del inventario si es necesario -->
+            <div class="form-group">
+                <label for="StockMaximo">Stock Máximo:</label>
+                <input id="StockMaximo" name="Stock_Maximo" type="number" class="form-control" />
+                @Html.ValidationMessageFor(model => model.Stock_Maximo, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                <label for="Proveedor">Proveedor:</label>
+                <select id="Proveedor" name="Id_Proveedor" class="form-control">
+                    @if (ViewBag.Proveedores != null)
+                    {
+                        foreach (var proveedor in ViewBag.Proveedores)
+                        {
+                            <option value="@proveedor.Id_Proveedor">@proveedor.Nombre</option>
+                        }
+                    }
+                </select>
+                @Html.ValidationMessageFor(model => model.Id_Proveedor, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                <label for="Producto">Producto:</label>
+                <select id="Producto" name="Id_Producto" class="form-control">
+                    @if (ViewBag.Productos != null)
+                    {
+                        foreach (var producto in ViewBag.Productos)
+                        {
+                            <option value="@producto.Id_Producto">@producto.Nombre</option>
+                        }
+                    }
+                </select>
+                @Html.ValidationMessageFor(model => model.Id_Producto, "", new { @class = "text-danger" })
+            </div>
 
             <div class="form-group">
                 <input type="submit" value="Agregar" class="btn btn-success" style="background-color: #94D3F6; color: black;" />
@@ -43,4 +75,3 @@
         </form>
     </div>
 </div>
-
