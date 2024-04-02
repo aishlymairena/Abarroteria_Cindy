@@ -9,7 +9,7 @@ namespace Abarroteria_Cindy.Models
         public string? Nombre { get; set; }
         public string? Apellido { get; set; }
         public string? Direccion { get; set; }
-        public DateTime Fecha_Nacimiento { get; set; }
+        public DateTime? Fecha_Nacimiento { get; set; }
         public int Telefono { get; set; }
         public string? DNI { get; set; }
         public string? Sexo { get; set; }
@@ -20,70 +20,46 @@ namespace Abarroteria_Cindy.Models
         public Guid RolId { set; get; }
         public bool Validacion()
         {
-            if (string.IsNullOrEmpty(Nombre))
+            // Verifica si alguno de los campos requeridos está vacío
+            if (string.IsNullOrEmpty(Nombre) ||
+                string.IsNullOrEmpty(Apellido) ||
+                string.IsNullOrEmpty(Direccion) ||
+                string.IsNullOrEmpty(Sexo) ||
+                string.IsNullOrEmpty(Correo) ||
+                string.IsNullOrEmpty(Contraseña2) ||
+                string.IsNullOrEmpty(Contraseña))
             {
                 return false;
-            }
-            if (string.IsNullOrEmpty(Apellido))
-            {
-                return false;
-            }
-            if (string.IsNullOrEmpty(Direccion))
-            {
-                return false;
-            }
-            if (Fecha_Nacimiento != null)
-            {
-                DateTime fechaNacimiento;
-                if (DateTime.TryParse(Fecha_Nacimiento.ToString(), out fechaNacimiento))
-                {
-                    // Calcular la edad actual
-                    int edad = DateTime.Today.Year - fechaNacimiento.Year;
-                    if (DateTime.Today < fechaNacimiento.AddYears(edad))
-                    {
-                        edad--;
-                    }
-
-                    // Comprobar si la edad está dentro del rango
-                    if (edad < 15 || edad > 50)
-                    {
-                        // La edad no está dentro del rango permitido
-                        return false;
-                    }
-                }
-                else
-                {
-                    // La fecha de nacimiento introducida no es válida
-                    return false;
-                }
             }
 
-            if (Telefono.ToString().Length != 8 || Telefono != null)
+            // Verifica si la contraseña y la contraseña2 son iguales
+            if (Contraseña != Contraseña2)
             {
                 return false;
             }
-            if (DNI.Length != 13 || DNI != null)
+
+
+            // Verifica si el campo Teléfono tiene 8 dígitos
+            if (Telefono.ToString().Length != 8)
             {
                 return false;
             }
-            if (string.IsNullOrEmpty(Sexo))
+
+
+            // Verifica si el campo DNI tiene 13 dígitos
+            if (DNI != null && !Regex.IsMatch(DNI, @"^\d{13}$"))
             {
                 return false;
             }
-            if (string.IsNullOrEmpty(Correo) || !Regex.IsMatch(Correo, @"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"))
-            {
-                return false;
-            }
-            if (string.IsNullOrEmpty(Contraseña2))
-            {
-                return false;
-            }
-            if (string.IsNullOrEmpty(Contraseña) || Contraseña != Contraseña2)
+
+            // Verifica si la Fecha de Nacimiento es válida (mínimo 16 años)
+            if (Fecha_Nacimiento == null || DateTime.Today.AddYears(-16) < Fecha_Nacimiento)
             {
                 return false;
             }
 
             return true;
         }
+
     }
 }

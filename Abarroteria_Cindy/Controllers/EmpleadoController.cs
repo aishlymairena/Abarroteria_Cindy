@@ -90,7 +90,7 @@ namespace Abarroteria_Cindy.Controllers
             nuevoempleado.Sexo = empleado.Sexo;
             nuevoempleado.Direccion = empleado.Direccion;
             nuevoempleado.Correo = empleado.Correo;
-            nuevoempleado.Contraseña = empleado.Contraseña;
+
 
             _context.SaveChanges();
             TempData["mensaje"] = "Modificado Correctamente";

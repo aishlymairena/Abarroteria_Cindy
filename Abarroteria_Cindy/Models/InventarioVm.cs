@@ -9,6 +9,8 @@ namespace Abarroteria_Cindy.Models
         public int Stock_Minimo { get; set; }
         public int Stock_Maximo { get; set; }
         public Guid Id_Proveedor { set; get; }
-        public Proveedor Proveedor { get; set; }
+        public ProveedorVm? Proveedor { get; set; }
+        public Guid? Id_Producto { set; get; }
+        public ProductoVm? Producto { get; set; }
     }
 }
