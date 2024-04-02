@@ -1,0 +1,93 @@
+﻿@model ClienteVm
+@{
+    ViewData["Title"] = "Editar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <h1>Editar Cliente</h1>
+
+    <div class="row">
+        <form method="post" asp-action="Editar">
+            <div class="row">
+                <div class="danger">
+                    @if (TempData["mensaje"] != null)
+                    {
+                        <div class="alert alert-warning alert-dismissible" role="alert">
+                            <p> @TempData["mensaje"]</p>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="close">
+                                <span aria-hidden="true">&times;</span>
+
+                            </button>
+                        </div>
+                    }
+                </div>
+
+            </div>
+            <input asp-for="Id_Cliente" type="hidden" class="form-control" />
+            <div class="form-group">
+                <label asp-for="Nombre" class="control-label"></label>
+                <input asp-for="Nombre" class="form-control" />
+                <span asp-validation-for="Nombre" class="text-danger"></span>
+
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Apellido" class="control-label"></label>
+                <input asp-for="Apellido" class=" form-control" />
+                <span asp-validation-for="Apellido" class="text-danger"></span>
+
+            </div>
+
+            <div class="form-group">
+                <label for="start">Fecha de Nacimiento:</label>
+                <br />
+                <input type="date" id="Fecha" name="Fecha"
+                       value="ToDateTime(Model.Fecha_Nacimiento).ToString(" yyyy-MM-dd")" />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Telefono" class="control-label"></label>
+                <input asp-for="Telefono" class="form-control" />
+                <span asp-validation-for="Telefono" class="text-danger"></span>
+
+            </div>
+            <div class="form-group">
+                <label asp-for="DNI" class="control-label"></label>
+                <input asp-for="DNI" class="form-control" />
+                <span asp-validation-for="DNI" class="text-danger"></span>
+
+            </div>
+
+            <fieldset>
+                <legend>Sexo:</legend>
+
+                <div style="display: inline-block;">
+                    <input asp-for="Sexo" type="radio" value="Hombre" />
+                    <label asp-for="DNI">Hombre</label>
+                </div>
+
+                <divstyle ="display: inline-block;">
+                    <input asp-for="Sexo" type="radio" value="Mujer" />
+                    <label asp-for="DNI">Mujer</label>
+                </divstyle>
+            </fieldset>
+            <div class="form-group">
+                <label asp-for="Direccion" class="control-label"></label>
+                <input asp-for="Direccion" class="form-control" />
+                <span asp-validation-for="Direccion" class="text-danger"></span>
+
+            </div>
+
+
+            <div class="form-group">
+                <input type="submit" value="Editar" class="btn-success" style="color: #000; background-color: #0dcaf0; border-color: #0dcaf0;" />
+            </div>
+
+
+        </form>
+
+    </div>
+
+</div>
+
