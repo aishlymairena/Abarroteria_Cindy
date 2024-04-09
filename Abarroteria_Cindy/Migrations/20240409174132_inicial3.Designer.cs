@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Abarroteria_Cindy.Migrations
 {
     [DbContext(typeof(AbarroteriaBdContext))]
-    [Migration("20240402192427_inicial")]
-    partial class inicial
+    [Migration("20240409174132_inicial3")]
+    partial class inicial3
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -419,6 +419,45 @@ namespace Abarroteria_Cindy.Migrations
                     b.HasIndex("RolId");
 
                     b.ToTable("ModulosRoles");
+                });
+
+            modelBuilder.Entity("Abarroteria_Cindy.Data.Entidades.Pago", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<double>("Cambio")
+                        .HasColumnType("float");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("Eliminado")
+                        .HasColumnType("bit");
+
+                    b.Property<double>("Impuesto")
+                        .HasColumnType("float");
+
+                    b.Property<double>("MontoRecibido")
+                        .HasColumnType("float");
+
+                    b.Property<string>("NumeroFactura")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("TotalImp")
+                        .HasColumnType("float");
+
+                    b.Property<double>("TotalPagar")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Pago");
                 });
 
             modelBuilder.Entity("Abarroteria_Cindy.Data.Entidades.Producto", b =>

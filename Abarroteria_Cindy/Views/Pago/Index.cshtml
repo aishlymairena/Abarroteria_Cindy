@@ -1,0 +1,58 @@
+﻿@model List<PagoVm>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form asp-action="Insertar" method="get">
+    <div class="row">
+        <div class="danger">
+            @if (TempData["mensaje"] != null)
+            {
+                <div class="alert alert-warning alert-dismissable" role="alert">
+                    <p> @TempData["mensaje"]</p>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Insertar" class="btn btn-success" style="color: #000; background-color: #0dcaf0; border-color: #0dcaf0;">
+    </div>
+
+@if (Model.Count == 0)
+{
+    <p>No hay pagos registrados.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+
+                <th>Número de Factura</th>
+                <th>Total a Pagar</th>
+                <th>Impuesto</th>
+                <th>Monto Recibido</th>
+                <th>Cambio</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var pago in Model)
+            {
+                <tr>
+                    <td>@pago.NumeroFactura</td>
+                    <td>@pago.TotalPagar</td>
+                    <td>@pago.Impuesto</td>
+                    <td>@pago.MontoRecibido</td>
+                    <td>@pago.Cambio</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+  
+}
+</form>
+

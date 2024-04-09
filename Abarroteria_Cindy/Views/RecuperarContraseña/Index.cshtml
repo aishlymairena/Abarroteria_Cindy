@@ -1,0 +1,22 @@
+﻿@{
+    ViewData["Title"] = "Recuperar Contraseña";
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+}
+
+
+<h1>Recuperar Contraseña</h1>
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.Error
+    </div>
+}
+
+<form method="post" asp-action="EnviarCorreoRecuperacion">
+    <div class="form-group">
+        <label for="correoElectronico">Correo Electrónico:</label>
+        <input type="email" class="form-control" id="correoElectronico" name="correoElectronico" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Enviar Solicitud</button>
+</form>

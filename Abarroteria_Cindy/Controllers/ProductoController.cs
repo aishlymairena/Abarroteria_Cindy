@@ -1,9 +1,11 @@
 ﻿using Abarroteria_Cindy.Data;
 using Abarroteria_Cindy.Data.Entidades;
+using Abarroteria_Cindy.Filters;
 using Abarroteria_Cindy.Models;
 using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
 using System;
 using System.Linq;
 
@@ -19,7 +21,7 @@ namespace Abarroteria_Cindy.Controllers
             _logger = logger;
             _context = context;
         }
-
+        [ClaimRequirement("Productos")]
         public IActionResult Index(string terminoBusqueda)
         {
             var productos = _context.Producto.Where(p => !p.Eliminado);
@@ -35,6 +37,7 @@ namespace Abarroteria_Cindy.Controllers
         }
 
         [HttpGet]
+        [ClaimRequirement("Productos")]
         public IActionResult Insertar()
         {
             var producto = new ProductoVm();
@@ -43,6 +46,7 @@ namespace Abarroteria_Cindy.Controllers
         }
 
         [HttpPost]
+        [ClaimRequirement("Productos")]
         public IActionResult Insertar(ProductoVm producto)
         {
             if (!producto.Validacion())
@@ -51,7 +55,10 @@ namespace Abarroteria_Cindy.Controllers
                 ViewBag.Categorias = _context.Categoria.ToList(); // Recargar categorías para mostrar en la vista
                 return View(producto);
             }
-
+            var sesionJson = HttpContext.Session.GetString("UsuarioObjeto");
+            var base64EncodedBytes = System.Convert.FromBase64String(sesionJson);
+            var sesion = System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
+            EmpleadoVm UsuarioObjeto = JsonConvert.DeserializeObject<EmpleadoVm>(sesion);
             var nuevoProducto = new Producto
             {
                 Id_Producto = Guid.NewGuid(),
@@ -60,6 +67,9 @@ namespace Abarroteria_Cindy.Controllers
                 Precio_Normal = producto.Precio_Normal,
                 Precio_Mayorista = producto.Precio_Mayorista,
                 Id_Categoria = producto.Id_Categoria,
+                CreatedBy = UsuarioObjeto.Id_Empleado, // Debes establecer el valor correcto para CreatedBy
+                CreatedDate = DateTime.Now, // Debes establecer el valor correcto para CreatedDate
+                Eliminado = false // Por defecto, no está eliminado
             };
 
             _context.Producto.Add(nuevoProducto);
@@ -69,6 +79,7 @@ namespace Abarroteria_Cindy.Controllers
         }
 
         [HttpGet]
+        [ClaimRequirement("Productos")]
         public IActionResult Editar(Guid id)
         {
             var producto = _context.Producto.FirstOrDefault(p => p.Id_Producto == id);
@@ -93,6 +104,7 @@ namespace Abarroteria_Cindy.Controllers
         }
 
         [HttpPost]
+        [ClaimRequirement("Productos")]
         public IActionResult Editar(ProductoVm producto)
         {
             if (!producto.Validacion())
@@ -121,6 +133,7 @@ namespace Abarroteria_Cindy.Controllers
 
 
         [HttpGet]
+        [ClaimRequirement("Productos")]
         public IActionResult Eliminar(Guid id)
         {
             var producto = _context.Producto.FirstOrDefault(p => p.Id_Producto == id);
@@ -145,6 +158,7 @@ namespace Abarroteria_Cindy.Controllers
         }
 
         [HttpPost]
+        [ClaimRequirement("Productos")]
         public IActionResult Eliminar(ProductoVm producto)
         {
             var productoExistente = _context.Producto.FirstOrDefault(p => p.Id_Producto == producto.Id_Producto);
@@ -157,6 +171,18 @@ namespace Abarroteria_Cindy.Controllers
             _context.SaveChanges();
             TempData["mensaje"] = "Producto eliminado correctamente.";
             return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        [ClaimRequirement("Productos")]
+        public IActionResult ObtenerPrecio(Guid productId)
+        {
+            var producto = _context.Producto.FirstOrDefault(p => p.Id_Producto == productId);
+            if (producto != null)
+            {
+                return Json(producto.Precio_Normal);
+            }
+            return Json(null);
         }
     }
 }

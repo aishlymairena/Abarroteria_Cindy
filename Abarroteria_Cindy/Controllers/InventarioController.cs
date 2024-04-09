@@ -1,9 +1,11 @@
 ﻿using Abarroteria_Cindy.Data;
 using Abarroteria_Cindy.Data.Entidades;
+using Abarroteria_Cindy.Filters;
 using Abarroteria_Cindy.Models;
 using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
 using System;
 using System.Linq;
 
@@ -19,7 +21,7 @@ namespace Abarroteria_Cindy.Controllers
             _logger = logger;
             _context = context;
         }
-
+        [ClaimRequirement("Inventario")]
         public IActionResult Index()
         {
             var inventarios = _context.Inventario.ProjectToType<InventarioVm>().ToList();
@@ -27,6 +29,7 @@ namespace Abarroteria_Cindy.Controllers
         }
 
         [HttpGet]
+        [ClaimRequirement("Inventario")]
         public IActionResult Insertar()
         {
             var inventario = new InventarioVm();
@@ -36,6 +39,7 @@ namespace Abarroteria_Cindy.Controllers
         }
 
         [HttpPost]
+        [ClaimRequirement("Inventario")]
         public IActionResult Insertar(InventarioVm inventario)
         {
             if (!inventario.Validacion())
@@ -45,7 +49,10 @@ namespace Abarroteria_Cindy.Controllers
                 ViewBag.Proveedores = _context.Proveedor.ToList(); // Recargar proveedores para mostrar en la vista
                 return View(inventario);
             }
-
+            var sesionJson = HttpContext.Session.GetString("UsuarioObjeto");
+            var base64EncodedBytes = System.Convert.FromBase64String(sesionJson);
+            var sesion = System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
+            EmpleadoVm UsuarioObjeto = JsonConvert.DeserializeObject<EmpleadoVm>(sesion);
             var nuevoInventario = new Inventario
             {
                 Id_Inventario = Guid.NewGuid(),
@@ -54,7 +61,7 @@ namespace Abarroteria_Cindy.Controllers
                 Stock_Maximo = inventario.Stock_Maximo,
                 Id_Proveedor = inventario.Id_Proveedor,
                 Id_Producto = inventario.Id_Producto,
-                CreatedBy = Guid.NewGuid(), // Debes establecer el valor correcto para CreatedBy
+                CreatedBy = UsuarioObjeto.Id_Empleado, // Debes establecer el valor correcto para CreatedBy
                 CreatedDate = DateTime.Now, // Debes establecer el valor correcto para CreatedDate
                 Eliminado = false // Por defecto, no está eliminado
             };
@@ -68,6 +75,7 @@ namespace Abarroteria_Cindy.Controllers
 
 
         [HttpGet]
+        [ClaimRequirement("Inventario")]
         public IActionResult Editar(Guid id)
         {
             var inventario = _context.Inventario.FirstOrDefault(i => i.Id_Inventario == id);
@@ -95,6 +103,7 @@ namespace Abarroteria_Cindy.Controllers
         }
 
         [HttpPost]
+        [ClaimRequirement("Inventario")]
         public IActionResult Editar(InventarioVm inventario)
         {
             if (!inventario.Validacion())
@@ -126,6 +135,7 @@ namespace Abarroteria_Cindy.Controllers
 
 
         [HttpGet]
+        [ClaimRequirement("Inventario")]
         public IActionResult Eliminar(Guid id)
         {
             var inventario = _context.Inventario.FirstOrDefault(i => i.Id_Inventario == id);
@@ -153,6 +163,7 @@ namespace Abarroteria_Cindy.Controllers
         }
 
         [HttpPost]
+        [ClaimRequirement("Inventario")]
         public IActionResult Eliminar(InventarioVm inventario)
         {
             var inventarioExistente = _context.Inventario.FirstOrDefault(i => i.Id_Inventario == inventario.Id_Inventario);

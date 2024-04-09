@@ -5,7 +5,7 @@ namespace Abarroteria_Cindy.Models
 {
     public class ProveedorVm
     {
-        public Guid Id_Proveedor { get; set; }
+        public Guid? Id_Proveedor { get; set; }
         public string Nombre { get; set; }
         public int Telefono { get; set; }
         public string Correo { get; set; }

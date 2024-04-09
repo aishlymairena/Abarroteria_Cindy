@@ -1,8 +1,10 @@
 ﻿using Abarroteria_Cindy.Data;
 using Abarroteria_Cindy.Data.Entidades;
+using Abarroteria_Cindy.Filters;
 using Abarroteria_Cindy.Models;
 using Mapster;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace Abarroteria_Cindy.Controllers
 {
@@ -16,6 +18,7 @@ namespace Abarroteria_Cindy.Controllers
             _logger = logger;
             _context = context;
         }
+        [ClaimRequirement("Clientes")]
         public IActionResult Index()
         {
             var cliente = _context.Cliente.Where(w => w.Eliminado == false).ProjectToType<ClienteVm>().ToList();
@@ -23,6 +26,7 @@ namespace Abarroteria_Cindy.Controllers
         }
 
         [HttpGet]
+        [ClaimRequirement("Clientes")]
         public IActionResult Insertar()
         {
             ClienteVm registros = new ClienteVm();
@@ -30,6 +34,7 @@ namespace Abarroteria_Cindy.Controllers
         }
 
         [HttpPost]
+        [ClaimRequirement("Clientes")]
         public IActionResult Insertar(ClienteVm cliente)
         {
             if (!cliente.Validacion())
@@ -39,6 +44,10 @@ namespace Abarroteria_Cindy.Controllers
                 return View(cliente);
 
             }
+            var sesionJson = HttpContext.Session.GetString("UsuarioObjeto");
+            var base64EncodedBytes = System.Convert.FromBase64String(sesionJson);
+            var sesion = System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
+            EmpleadoVm UsuarioObjeto = JsonConvert.DeserializeObject<EmpleadoVm>(sesion);
 
             Cliente nuevoCliente = new Cliente();
             nuevoCliente.Nombre = cliente.Nombre;
@@ -49,7 +58,7 @@ namespace Abarroteria_Cindy.Controllers
             nuevoCliente.Sexo = cliente.Sexo;
             nuevoCliente.Direccion = cliente.Direccion;
             nuevoCliente.CreatedDate = DateTime.Now;
-            nuevoCliente.CreatedBy = Guid.Empty;
+            nuevoCliente.CreatedBy = UsuarioObjeto.Id_Empleado;
             nuevoCliente.Eliminado = false;
             nuevoCliente.Id_Cliente = Guid.NewGuid();
 
@@ -61,7 +70,7 @@ namespace Abarroteria_Cindy.Controllers
         }
 
         [HttpGet]
-
+        [ClaimRequirement("Clientes")]
         public IActionResult Editar(Guid Id_Cliente)
         {
             var registro = _context.Cliente
@@ -72,6 +81,7 @@ namespace Abarroteria_Cindy.Controllers
             return View(registro);
         }
         [HttpPost]
+        [ClaimRequirement("Clientes")]
         public IActionResult Editar(ClienteVm cliente)
         {
             var nuevoCliente = _context.Cliente.FirstOrDefault(w => w.Id_Cliente == cliente.Id_Cliente);
@@ -92,6 +102,7 @@ namespace Abarroteria_Cindy.Controllers
         }
 
         [HttpGet]
+        [ClaimRequirement("Clientes")]
         public IActionResult Eliminar(Guid Id_Cliente)
         {
 
@@ -104,6 +115,7 @@ namespace Abarroteria_Cindy.Controllers
         }
 
         [HttpPost]
+        [ClaimRequirement("Clientes")]
         public IActionResult Eliminar(ClienteVm registros)
         {
 
