@@ -2,6 +2,8 @@
 using Abarroteria_Cindy.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Abarroteria_Cindy.Controllers
 {
@@ -35,7 +37,9 @@ namespace Abarroteria_Cindy.Controllers
                     return View(model);
                 }
 
-                if (empleado.Contraseña != model.ContraseñaAnterior)
+                string contraseñaAnteriorHash = ObtenerMD5Hash(model.ContraseñaAnterior);
+
+                if (empleado.Contraseña != contraseñaAnteriorHash)
                 {
                     ModelState.AddModelError("ContraseñaAnterior", "La contraseña anterior es incorrecta.");
                     return View(model);
@@ -53,7 +57,7 @@ namespace Abarroteria_Cindy.Controllers
                     return View(model);
                 }
 
-                empleado.Contraseña = model.NuevaContraseña;
+                empleado.Contraseña = ObtenerMD5Hash(model.NuevaContraseña);
 
                 _context.SaveChanges();
 
@@ -64,5 +68,21 @@ namespace Abarroteria_Cindy.Controllers
             return View(model);
         }
 
+        private string ObtenerMD5Hash(string input)
+        {
+            using (MD5 md5Hash = MD5.Create())
+            {
+                byte[] data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(input));
+
+                StringBuilder sBuilder = new StringBuilder();
+                for (int i = 0; i < data.Length; i++)
+                {
+                    sBuilder.Append(data[i].ToString("x2"));
+                }
+
+                return sBuilder.ToString();
+            }
+        }
     }
+
 }
