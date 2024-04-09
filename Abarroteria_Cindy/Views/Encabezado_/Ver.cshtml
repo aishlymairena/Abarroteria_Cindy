@@ -4,37 +4,49 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+
+
 <h1>Ver</h1>
-<div>
-    <h4>Fecha de Emisión:</h4>
-    <p>@Model.Fecha_Emision</p>
-</div>
-<div>
-    <h4>Número de Factura:</h4>
-    <p>@Model.NumeroFactura</p>
-</div>
-<div>
-    <h4>RTN:</h4>
-    <p>@Model.RTN</p>
-</div>
+
+<form method="get" asp-action="Ver">
+        <div class="container">
+        <h1>Ver Encabezado de Factura </h1>
+
+    <div class="row">
+        
 
 
-<hr />
-
-<h3>Detalles de la Factura</h3>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Nombre Producto</th>
-            <th>Cantidad</th>
-            <th>Precio Unitario</th>
-            <th>Total Línea</th>
-        </tr>
-    </thead>
-
-</table>
+            <div>
+                <h4>Fecha de Emisión:</h4>
+                <p>@Model.Fecha_Emision</p>
+            </div>
+            <div>
+                <h4>Número de Factura:</h4>
+                <p>@Model.NumeroFactura</p>
+            </div>
+            <div>
+                <h4>RTN:</h4>
+                <p>@Model.RTN</p>
+            </div>
 
 
-<a asp-action="Index" class="btn btn-primary">Volver a la lista</a>
+            <hr />
+
+            <h3>Detalles de la Factura</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Nombre Producto</th>
+                        <th>Cantidad</th>
+                        <th>Precio Unitario</th>
+                        <th>Total Línea</th>
+                    </tr>
+                </thead>
+
+            </table>
+            
+
+            <a asp-action="Index" class="btn btn-primary">Volver a la lista</a>
 
 
+            </form>
