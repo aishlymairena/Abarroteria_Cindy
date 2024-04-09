@@ -23,6 +23,7 @@
         public Encabezado_Factura()
         {
             Detalles = new HashSet<Detalle_Factura>();
+           
         }
     }
 }
