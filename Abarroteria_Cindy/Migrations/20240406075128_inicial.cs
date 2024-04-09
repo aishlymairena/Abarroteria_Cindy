@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Abarroteria_Cindy.Migrations
 {
-    public partial class migracioninicial : Migration
+    public partial class inicial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -77,6 +77,25 @@ namespace Abarroteria_Cindy.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Cliente", x => x.Id_Cliente);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Pago",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    NumeroFactura = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Impuesto = table.Column<double>(type: "float", nullable: false),
+                    TotalPagar = table.Column<double>(type: "float", nullable: false),
+                    MontoRecibido = table.Column<double>(type: "float", nullable: false),
+                    Cambio = table.Column<double>(type: "float", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Eliminado = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Pago", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -169,7 +188,7 @@ namespace Abarroteria_Cindy.Migrations
                     Nombre = table.Column<string>(type: "Varchar(50)", nullable: true),
                     Apellido = table.Column<string>(type: "Varchar(50)", nullable: true),
                     Direccion = table.Column<string>(type: "Varchar(255)", nullable: true),
-                    Fecha_Nacimiento = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Fecha_Nacimiento = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Telefono = table.Column<int>(type: "int", nullable: false),
                     DNI = table.Column<string>(type: "Varchar(13)", nullable: true),
                     Sexo = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -391,6 +410,9 @@ namespace Abarroteria_Cindy.Migrations
 
             migrationBuilder.DropTable(
                 name: "ModulosRoles");
+
+            migrationBuilder.DropTable(
+                name: "Pago");
 
             migrationBuilder.DropTable(
                 name: "Encabezado_Factura");

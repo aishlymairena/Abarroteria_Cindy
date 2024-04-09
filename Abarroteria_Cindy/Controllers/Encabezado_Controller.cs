@@ -1,5 +1,6 @@
 ﻿using Abarroteria_Cindy.Data;
 using Abarroteria_Cindy.Data.Entidades;
+using Abarroteria_Cindy.Filters;
 using Abarroteria_Cindy.Models;
 using Mapster;
 using Microsoft.AspNetCore.Mvc;
@@ -18,6 +19,7 @@ namespace Abarroteria_Cindy.Controllers
             _logger = logger;
             _context = context;
         }
+        [ClaimRequirement("Factura")]
         public IActionResult Index()
         {
             var factura = _context.Encabezado_Factura.Where(w => w.Eliminado == false).ProjectToType<EncabezadoVm>().ToList();
@@ -74,11 +76,9 @@ namespace Abarroteria_Cindy.Controllers
             return rnd.Next(1000, 9999).ToString(); // Número aleatorio de 4 dígitos
         }
 
-
         [HttpPost]
         public IActionResult Insertar(EncabezadoVm factura)
         {
-
             var listaCAI = _context.CAI.ToList();
             var listaEmpleados = _context.Empleado.ToList();
             var listaClientes = _context.Cliente.ToList();
@@ -114,64 +114,21 @@ namespace Abarroteria_Cindy.Controllers
                 RTN = rtnPorDefecto,
                 Id_Empleado = factura.Id_Empleado,
                 Id_Cai = factura.Id_Cai,
-                Id_Cliente = factura.Id_Cliente,
-
+                Id_Cliente = factura.Id_Cliente
             };
 
+            _context.Encabezado_Factura.Add(nuevoEncabezado);
+            _context.SaveChanges();
 
+            TempData["mensaje"] = "Registrado Correctamente";
 
-           
+            // ID del encabezado creado
+            var encabezadoId = nuevoEncabezado.Id_Encabezado_factura;
 
-                // Agregar el nuevo encabezado al contexto y guardar los cambios
-                _context.Encabezado_Factura.Add(nuevoEncabezado);
-                _context.SaveChanges();
-
-                TempData["mensaje"] = "Registrado Correctamente";
-                return RedirectToAction("Index", "Detalle");
-            //}
-
-            return View(factura);
+            //esto pasa al ID del encabezado a la vista Insertar de Detalle
+            return RedirectToAction("Insertar", "Detalle", new { encabezadoId = encabezadoId });
         }
 
-        private string GenerarNumeroFacturaUnico()
-        {          
-            
-            var random = new Random();
-            var numeroFactura = random.Next(100000, 999999).ToString(); // Número aleatorio de 6 dígitos
-            return numeroFactura;
-        }
-
-
-
-        [HttpGet]
-        public IActionResult Ver (EncabezadoVm encabezadoVmParametro)
-        {
-            var encabezado = _context.Encabezado_Factura
-                                      .Include(e => e.Detalles)
-                                      .SingleOrDefault(e => e.Id_Encabezado_factura == encabezadoVmParametro.Id_Encabezado_factura);
-
-            var encabezadoVm = new EncabezadoVm
-            {
-                // Mapear las propiedades del encabezado a la vista modelo correspondiente (EncabezadoVm)
-                Id_Encabezado_factura = encabezado.Id_Encabezado_factura,
-                Fecha_Emision = encabezado.Fecha_Emision,
-                RTN = encabezado.RTN,
-                NumeroFactura = encabezado.NumeroFactura,
-                Total = encabezado.Total,
-                Monto_Entregado = encabezado.Monto_Entregado,
-                Cambio = encabezado.Cambio,
-                Impuesto = encabezado.Impuesto,
-                Id_Empleado = encabezado.Id_Empleado,
-                Empleado = new EmpleadoVm { Nombre = encabezado.Empleado.Nombre }, // Mapear solo el nombre del empleado
-                Id_Cliente = encabezado.Id_Cliente,
-                Cliente = new ClienteVm { Nombre = encabezado.Cliente.Nombre }, // Mapear solo el nombre del cliente
-                Id_Cai = encabezado.Id_Cai,
-                CAI = new CAIVm { Cai = encabezado.CAI.Cai } // Mapear solo el CAI
-                                                             // Agrega más propiedades según sea necesario
-            };
-
-            return View(encabezadoVm);
-        }
 
     }
 }

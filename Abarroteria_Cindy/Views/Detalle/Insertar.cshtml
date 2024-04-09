@@ -4,56 +4,88 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Insertar</h1>
+<h2>Agregar Nuevo Detalle de Factura</h2>
 
 <div class="container">
-    <h1>Detalle</h1>
+   
+
+    <div class="row">
+        <form method="post" asp-action="Insertar">
+            <div class="row">
+                <div class="danger">
+                    @if (TempData["mensaje"] != null)
+                    {
+                        <div class="alert alert-warning alert-dismissible" role="alert">
+                            <p> @TempData["mensaje"]</p>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <input type="hidden" name="Id_Encabezado_Factura" value="@ViewBag.EncabezadoId" />
 
 
 
-    <form method="post">
-        <div class="form-group">
+            <div class="form-group">
+                <label for="Id_Producto">Producto:</label>
+                <select class="form-control" id="Id_Producto" name="Id_Producto">
+                    <option value="">-- Seleccione un Producto --</option>
+                    @foreach (var producto in ViewBag.Productos)
+                    {
+                        <option value="@producto.Id_Producto">@producto.Nombre</option>
+                    }
+                </select>
+            </div>
 
-            <input asp-for="Id_Detalle_Factura" type="hidden" class="form-control" />
+            <div class="form-group">
+                <label for="Precio">Precio:</label>
+                <input type="text" class="form-control" id="Precio" readonly />
+            </div>
 
-            <label asp-for="Id_Producto">Producto</label>
-            <select asp-for="Id_Producto" asp-items="@(ViewBag.ProductList)" class="form-control">
-                <option value="">-- Seleccione Producto --</option>
-            </select>
-        </div>
+            <div class="form-group">
+                <label for="Cantidad">Cantidad:</label>
+                <input type="number" class="form-control" id="Cantidad" name="Cantidad" />
+            </div>
 
-        <div class="form-group">
-            <label style="font-size: 16px;">Precio Normal del Producto</label>
-            <span id="precioNormal" class="form-control" readonly></span>
-        </div>
+            <div class="form-group">
+                <label for="Total_Linea">Total de Línea:</label>
+                <input type="text" class="form-control" id="Total_Linea" readonly />
+            </div>
+            <button type="submit" class="btn btn-primary">Agregar Producto</button>
+            <a href="@Url.Action("Insertar", "Pago", new { encabezadoId = ViewBag.EncabezadoId })" class="btn btn-success">Continuar al Pago</a>
+        </form>
+    </div>
+        
+    </div>
+</div>
 
-        <div class="form-group">
-            <label asp-for="Cantidad" class="control-label">Cantidad</label>
-            <input asp-for="Cantidad" class="form-control" />
-            <span asp-validation-for="Cantidad" class="text-danger"></span>
-        </div>
+        
+    </div>
+</div>
 
-        <div class="form-group">
-            <label asp-for="Total_Linea" class="control-label">Total de la línea</label>
-            <input asp-for="Total_Linea" class="form-control" />
-            <span asp-validation-for="Total_Linea" class="text-danger"></span>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Guardar</button>
-    </form>
-
+@section Scripts {
     <script>
-        // Script para mostrar el precio normal del producto seleccionado
-        $('#Id_Producto').change(function () {
-            var productId = $(this).val();
-            var productList = @Html.Raw(Json.Serialize(ViewBag.ProductList)); // Obtener la lista de productos desde ViewBag
-
-            var product = productList.find(p => p.value == productId); // Buscar el producto por su ID
-
-            if (product) {
-                $('#precioNormal').text(product.text.split(' - ')[1]); // Mostrar el precio normal del producto en el span de precioNormal
-            } else {
-                $('#precioNormal').text(''); // Limpiar el span si no se encuentra el producto
-            }
+        $(function () {
+            $('#Id_Producto, #Cantidad').change(function () {
+                var productId = $('#Id_Producto').val();
+                var quantity = $('#Cantidad').val();
+                if (productId && quantity) {
+                    $.ajax({
+                        url: '/Producto/ObtenerPrecio',
+                        type: 'GET',
+                        data: { productId: productId },
+                        success: function (data) {
+                            var price = data;
+                            var totalLinea = price * quantity;
+                            $('#Precio').val(price);
+                            $('#Total_Linea').val(totalLinea);
+                        }
+                    });
+                }
+            });
         });
     </script>
+}

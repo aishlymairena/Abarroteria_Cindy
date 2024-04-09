@@ -9,7 +9,7 @@ namespace Abarroteria_Cindy.Models
         public int Total_Linea { get; set; }
         public EncabezadoVm Encabezado_Factura { get; set; }
         public Guid Id_Encabezado_Factura { set; get; }
-        public Producto Producto { get; set; }
+        public ProductoVm Producto { get; set; }
         public Guid Id_Producto { set; get; }
         public bool Validacion()
         {

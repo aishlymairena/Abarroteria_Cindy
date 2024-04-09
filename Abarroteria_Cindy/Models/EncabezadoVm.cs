@@ -18,5 +18,7 @@ namespace Abarroteria_Cindy.Models
         public Guid Id_Cliente { set; get; }
         public CAIVm CAI { get; set; }
         public Guid Id_Cai { set; get; }
+        
+
     }
 }

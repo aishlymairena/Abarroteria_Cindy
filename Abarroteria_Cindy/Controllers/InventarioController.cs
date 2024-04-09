@@ -1,11 +1,13 @@
 ﻿using Abarroteria_Cindy.Data;
+using Abarroteria_Cindy.Data.Entidades;
+using Abarroteria_Cindy.Filters;
 using Abarroteria_Cindy.Models;
-using Microsoft.AspNetCore.Mvc;
 using Mapster;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
 using System;
 using System.Linq;
-using Abarroteria_Cindy.Data.Entidades;
-using Microsoft.Win32;
 
 namespace Abarroteria_Cindy.Controllers
 {
@@ -19,43 +21,163 @@ namespace Abarroteria_Cindy.Controllers
             _logger = logger;
             _context = context;
         }
-
+        [ClaimRequirement("Inventario")]
         public IActionResult Index()
         {
-            var inventario = _context.Inventario.Where(w => w.Eliminado == false).ProjectToType<InventarioVm>().ToList();
-            return View(inventario);
+            var inventarios = _context.Inventario.ProjectToType<InventarioVm>().ToList();
+            return View(inventarios);
         }
 
         [HttpGet]
+        [ClaimRequirement("Inventario")]
         public IActionResult Insertar()
         {
             var inventario = new InventarioVm();
+            ViewBag.Productos = _context.Producto.ToList(); // Obtener productos desde la base de datos
+            ViewBag.Proveedores = _context.Proveedor.ToList(); // Obtener proveedores desde la base de datos
             return View(inventario);
         }
 
         [HttpPost]
+        [ClaimRequirement("Inventario")]
         public IActionResult Insertar(InventarioVm inventario)
         {
-            if (!ModelState.IsValid)
+            if (!inventario.Validacion())
             {
                 TempData["mensaje"] = "Todos los campos son obligatorios y deben ser válidos.";
+                ViewBag.Productos = _context.Producto.ToList(); // Recargar productos para mostrar en la vista
+                ViewBag.Proveedores = _context.Proveedor.ToList(); // Recargar proveedores para mostrar en la vista
                 return View(inventario);
             }
-
-            var nuevoInventario = new Inventario // Cambio aquí: Crear una nueva instancia de Inventario
+            var sesionJson = HttpContext.Session.GetString("UsuarioObjeto");
+            var base64EncodedBytes = System.Convert.FromBase64String(sesionJson);
+            var sesion = System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
+            EmpleadoVm UsuarioObjeto = JsonConvert.DeserializeObject<EmpleadoVm>(sesion);
+            var nuevoInventario = new Inventario
             {
                 Id_Inventario = Guid.NewGuid(),
-                Stock_Maximo = inventario.Stock_Maximo
-                // Agrega más asignaciones de propiedades si es necesario
+                Stock_Actual = inventario.Stock_Actual,
+                Stock_Minimo = inventario.Stock_Minimo,
+                Stock_Maximo = inventario.Stock_Maximo,
+                Id_Proveedor = inventario.Id_Proveedor,
+                Id_Producto = inventario.Id_Producto,
+                CreatedBy = UsuarioObjeto.Id_Empleado, // Debes establecer el valor correcto para CreatedBy
+                CreatedDate = DateTime.Now, // Debes establecer el valor correcto para CreatedDate
+                Eliminado = false // Por defecto, no está eliminado
             };
 
             _context.Inventario.Add(nuevoInventario);
             _context.SaveChanges();
+
             TempData["mensaje"] = "Inventario registrado correctamente.";
+            return RedirectToAction("Index");
+        }
+
+
+        [HttpGet]
+        [ClaimRequirement("Inventario")]
+        public IActionResult Editar(Guid id)
+        {
+            var inventario = _context.Inventario.FirstOrDefault(i => i.Id_Inventario == id);
+            if (inventario == null)
+            {
+                return NotFound();
+            }
+
+            ViewBag.Productos = _context.Producto.ToList(); // Obtener productos desde la base de datos
+            ViewBag.Proveedores = _context.Proveedor.ToList(); // Obtener proveedores desde la base de datos
+
+            var inventarioVm = new InventarioVm
+            {
+                Id_Inventario = inventario.Id_Inventario,
+                Stock_Actual = inventario.Stock_Actual,
+                Stock_Minimo = inventario.Stock_Minimo,
+                Stock_Maximo = inventario.Stock_Maximo,
+                Id_Proveedor = inventario.Id_Proveedor,
+                Proveedor = inventario.Proveedor.Adapt<ProveedorVm>(),
+                Id_Producto = inventario.Id_Producto,
+                Producto = inventario.Producto.Adapt<ProductoVm>()
+            };
+
+            return View(inventarioVm);
+        }
+
+        [HttpPost]
+        [ClaimRequirement("Inventario")]
+        public IActionResult Editar(InventarioVm inventario)
+        {
+            if (!inventario.Validacion())
+            {
+                TempData["mensaje"] = "Todos los campos son obligatorios y deben ser válidos.";
+                ViewBag.Productos = _context.Producto.ToList(); // Recargar productos para mostrar en la vista
+                ViewBag.Proveedores = _context.Proveedor.ToList(); // Recargar proveedores para mostrar en la vista
+                return View(inventario);
+            }
+
+            var inventarioExistente = _context.Inventario.FirstOrDefault(i => i.Id_Inventario == inventario.Id_Inventario);
+            if (inventarioExistente == null)
+            {
+                return NotFound();
+            }
+
+            // Actualizar los datos del inventario existente con los datos del ViewModel
+            inventarioExistente.Stock_Actual = inventario.Stock_Actual;
+            inventarioExistente.Stock_Minimo = inventario.Stock_Minimo;
+            inventarioExistente.Stock_Maximo = inventario.Stock_Maximo;
+            inventarioExistente.Id_Proveedor = inventario.Id_Proveedor;
+            inventarioExistente.Id_Producto = inventario.Id_Producto;
+
+            _context.SaveChanges();
+
+            TempData["mensaje"] = "Inventario actualizado correctamente.";
+            return RedirectToAction("Index");
+        }
+
+
+        [HttpGet]
+        [ClaimRequirement("Inventario")]
+        public IActionResult Eliminar(Guid id)
+        {
+            var inventario = _context.Inventario.FirstOrDefault(i => i.Id_Inventario == id);
+            if (inventario == null)
+            {
+                return NotFound();
+            }
+
+            ViewBag.Productos = _context.Producto.ToList(); // Obtener productos desde la base de datos
+            ViewBag.Proveedores = _context.Proveedor.ToList(); // Obtener proveedores desde la base de datos
+
+            var inventarioVm = new InventarioVm
+            {
+                Id_Inventario = inventario.Id_Inventario,
+                Stock_Actual = inventario.Stock_Actual,
+                Stock_Minimo = inventario.Stock_Minimo,
+                Stock_Maximo = inventario.Stock_Maximo,
+                Id_Proveedor = inventario.Id_Proveedor,
+                Proveedor = inventario.Proveedor.Adapt<ProveedorVm>(),
+                Id_Producto = inventario.Id_Producto,
+                Producto = inventario.Producto.Adapt<ProductoVm>()
+            };
+
+            return View(inventarioVm);
+        }
+
+        [HttpPost]
+        [ClaimRequirement("Inventario")]
+        public IActionResult Eliminar(InventarioVm inventario)
+        {
+            var inventarioExistente = _context.Inventario.FirstOrDefault(i => i.Id_Inventario == inventario.Id_Inventario);
+            if (inventarioExistente == null)
+            {
+                return NotFound();
+            }
+
+            // Eliminar el inventario de la base de datos
+            _context.Inventario.Remove(inventarioExistente);
+            _context.SaveChanges();
+
+            TempData["mensaje"] = "Inventario eliminado correctamente.";
             return RedirectToAction("Index");
         }
     }
 }
-
-
-
