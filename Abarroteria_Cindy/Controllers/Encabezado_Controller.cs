@@ -5,6 +5,8 @@ using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Win32;
+using System.Linq;
 
 namespace Abarroteria_Cindy.Controllers
 {
@@ -23,6 +25,23 @@ namespace Abarroteria_Cindy.Controllers
             var factura = _context.Encabezado_Factura.Where(w => w.Eliminado == false).ProjectToType<EncabezadoVm>().ToList();
             return View(factura);
         }
+
+
+
+        public ActionResult Buscar()
+        {
+            var facturas = _context.Encabezado_Factura.ToList();
+            return View(facturas);
+        }
+
+        // POST: Facturas/SearchByDate
+        [HttpPost]
+        public ActionResult SearchByDate(DateTime searchDate)
+        {
+            var facturasByDate = _context.Encabezado_Factura.Where(f => f.Fecha_Emision == searchDate).ToList();
+            return View("Index", facturasByDate);
+        }
+
 
         [HttpGet]
         public IActionResult Insertar()
@@ -141,45 +160,22 @@ namespace Abarroteria_Cindy.Controllers
             return numeroFactura;
         }
 
-
-
         [HttpGet]
-        public IActionResult Ver (EncabezadoVm encabezadoVmParametro)
+  public IActionResult Ver(Guid Id_Encabezado_factura)
         {
-            var encabezado = _context.Encabezado_Factura
-                                      .Include(e => e.Detalles)
-                                      .SingleOrDefault(e => e.Id_Encabezado_factura == encabezadoVmParametro.Id_Encabezado_factura);
+            var registro = _context.Encabezado_Factura
+                          .Where(w => w.Id_Encabezado_factura == Id_Encabezado_factura)
+                          .ProjectToType<EncabezadoVm>()
+                          .FirstOrDefault();
 
-            if (encabezado == null)
-            {
-                // Manejar el caso en que no se encuentre ningún encabezado
-                return NotFound(); // O devuelve una vista personalizada para indicar que no se encontró el encabezado
-            }
-
-            var encabezadoVm = new EncabezadoVm
-            {
-                
-                Id_Encabezado_factura = encabezado.Id_Encabezado_factura,
-                Fecha_Emision = encabezado.Fecha_Emision,
-                RTN = encabezado.RTN,
-                NumeroFactura = encabezado.NumeroFactura,
-                Total = encabezado.Total,
-                Monto_Entregado = encabezado.Monto_Entregado,
-                Cambio = encabezado.Cambio,
-                Impuesto = encabezado.Impuesto,
-                Id_Empleado = encabezado.Id_Empleado,
-                Empleado = new EmpleadoVm { Nombre = encabezado.Empleado.Nombre }, 
-                Id_Cliente = encabezado.Id_Cliente,
-                Cliente = new ClienteVm { Nombre = encabezado.Cliente.Nombre }, // Mapear solo el nombre del cliente
-                Id_Cai = encabezado.Id_Cai,
-                CAI = new CAIVm { Cai = encabezado.CAI.Cai } // Mapear solo el CAI
-                                                             // Agrega más propiedades según sea necesario
-            };
-
-            return View(encabezadoVm);
+            return View(registro);
         }
 
+
+
+
     }
+
 }
 
 
