@@ -58,12 +58,16 @@ namespace Abarroteria_Cindy.Controllers
             // Calcular el impuesto
             var impuesto = totalPagar * 0.15; // Impuesto del 15%
 
+            // Calcular el total a pagar más el impuesto
+            var totalImp = totalPagar + impuesto;
+
             // Crear el ViewModel para el pago
             var pagoVm = new PagoVm
             {
-                NumeroFactura = _context.Encabezado_Factura.FirstOrDefault(e => e.Id_Encabezado_factura == encabezadoId)?.NumeroFactura,
+                NumeroFactura = encabezado.NumeroFactura,
                 TotalPagar = totalPagar,
-                Impuesto = impuesto
+                Impuesto = impuesto,
+                TotalImp = totalImp
             };
 
             return View(pagoVm);
@@ -89,18 +93,21 @@ namespace Abarroteria_Cindy.Controllers
             // Calcular el impuesto (por ejemplo, el 15% del total a pagar)
             var impuesto = totalPagar * 0.15;
 
+            // Calcular el total a pagar más el impuesto
+            var totalimp = totalPagar + impuesto;
+
             // Obtener el número de factura del encabezado
             var numeroFactura = encabezado.NumeroFactura;
 
             // Verificar que el monto recibido sea mayor o igual al total a pagar
-           // if (pagoVm.MontoRecibido < totalPagar)
-           // {
-           //     ModelState.AddModelError("MontoRecibido", "El monto recibido debe ser mayor o igual al total a pagar.");
-            //    return View(pagoVm); // Regresar el ViewModel con los errores de validación a la vista
-            //}
+            if (pagoVm.MontoRecibido < totalimp)
+            {
+                ModelState.AddModelError("MontoRecibido", "El monto recibido debe ser mayor o igual al total a pagar más impuesto.");
+                return View(pagoVm); // Regresar el ViewModel con los errores de validación a la vista
+            }
 
             // Calcular el cambio
-            var cambio = pagoVm.MontoRecibido - totalPagar;
+            var cambio = pagoVm.MontoRecibido - totalimp;
 
             // Crear el objeto Pago con los datos recibidos y los cálculos realizados
             var pago = new Pago
@@ -110,7 +117,8 @@ namespace Abarroteria_Cindy.Controllers
                 Impuesto = impuesto,
                 TotalPagar = totalPagar,
                 MontoRecibido = pagoVm.MontoRecibido,
-                Cambio = cambio
+                Cambio = cambio,
+                TotalImp = totalimp
             };
 
             // Agregar el nuevo pago al contexto y guardar los cambios en la base de datos
