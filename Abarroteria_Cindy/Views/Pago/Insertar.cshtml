@@ -24,6 +24,11 @@
         </div>
 
         <div class="form-group">
+            <label>Total a Pagar + Impuesto:</label>
+            <input type="text" id="totalimp" value="@Model.TotalImp" readonly class="form-control" />
+        </div>
+
+        <div class="form-group">
             <label>Monto Recibido:</label>
             <input type="number" id="montoRecibido" name="MontoRecibido" class="form-control" />
             <span id="montoRecibidoError" class="text-danger"></span>
@@ -43,11 +48,10 @@
         $(document).ready(function () {
             $('#montoRecibido').on('input', function () {
                 var montoRecibido = parseFloat($(this).val());
-                var totalPagar = parseFloat('@Model.TotalPagar');
-                var impuesto = parseFloat('@Model.Impuesto');
+                var totalPagarConImpuesto = parseFloat('@Model.TotalImp');
 
                 if (!isNaN(montoRecibido)) {
-                    var cambio = montoRecibido - totalPagar - impuesto;
+                    var cambio = montoRecibido - totalPagarConImpuesto;
                     $('#cambio').val(cambio.toFixed(2));
                 }
             });
@@ -56,15 +60,13 @@
                 e.preventDefault(); // Evita que el formulario se envíe automáticamente
 
                 var montoRecibido = parseFloat($('#montoRecibido').val());
-                var totalPagar = parseFloat('@Model.TotalPagar');
-                var impuesto = parseFloat('@Model.Impuesto');
+                var totalPagarConImpuesto = parseFloat('@Model.TotalImp');
 
-                if (isNaN(montoRecibido) || montoRecibido < totalPagar) {
-                    $('#montoRecibidoError').text('El monto recibido debe ser mayor o igual al total a pagar.');
+                if (isNaN(montoRecibido) || montoRecibido < totalPagarConImpuesto) {
+                    $('#montoRecibidoError').text('El monto recibido debe ser mayor o igual al total a pagar más impuesto.');
                     return;
                 }
 
-               
                 this.submit();
             });
         });
