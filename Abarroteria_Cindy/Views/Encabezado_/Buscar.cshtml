@@ -1,0 +1,18 @@
+﻿@{
+    ViewData["Title"] = "Buscar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Buscar</h1>
+
+
+
+<div>
+    @using (Html.BeginForm("SearchByDate", "Encabezado_Controller", FormMethod.Post))
+    {
+        <label>Buscar por Fecha:</label>
+        <input type="date" name="searchDate" />
+        <button type="date">Buscar</button>
+    }
+</div>
+
