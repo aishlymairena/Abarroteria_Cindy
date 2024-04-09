@@ -19,7 +19,9 @@
         public Guid Id_Cliente { set; get; }
         public CAI CAI { get; set; }
         public Guid Id_Cai { set; get; }
+       
         public ICollection<Detalle_Factura> Detalles { get; set; }
+
         public Encabezado_Factura()
         {
             Detalles = new HashSet<Detalle_Factura>();
