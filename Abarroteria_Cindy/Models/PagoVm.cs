@@ -10,6 +10,9 @@ namespace Abarroteria_Cindy.Models
         public double TotalPagar { get; set; }
         public double MontoRecibido { get; set; }
         public double Cambio { get; set; }
+
+        public double TotalImp { get; set; }
+
         public EncabezadoVm Encabezado { get; set; }
         public Guid Id_Encabezado_Factura { get; set; }
 

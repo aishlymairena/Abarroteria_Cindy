@@ -172,9 +172,10 @@ namespace Abarroteria_Cindy.Data
                 builder.Property(x => x.TotalPagar).IsRequired();
                 builder.Property(x => x.MontoRecibido).IsRequired();
                 builder.Property(x => x.Cambio).IsRequired();
+                builder.Property(x => x.TotalImp).IsRequired();
 
                 // Relación con la entidad Encabezado_Factura
-               
+
 
             }
 

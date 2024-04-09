@@ -10,6 +10,7 @@ namespace Abarroteria_Cindy.Data.Entidades
         public double TotalPagar { get; set; }
         public double MontoRecibido { get; set; }
         public double Cambio { get; set; }
+        public double TotalImp { get; set; }
 
         public Guid CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }

@@ -96,41 +96,8 @@ namespace Abarroteria_Cindy.Controllers
             TempData["mensaje"] = "Registrado Correctamente";
 
             // Redirigir al método de pago con el ID del encabezado
-            return RedirectToAction("Insertar", "Pago", new { encabezadoId = detalle.Id_Encabezado_Factura });//en este detalleConfirmacion que haya una boton por si desea agregar mas productos, si no, el boton de continuar al pago
+            return RedirectToAction("Insertar", new { encabezadoId = detalle.Id_Encabezado_Factura });
         }
-
-        [HttpGet]
-        public IActionResult DetalleConfirmacion(Guid detalleId)
-        {
-
-
-            // Obtener el detalle de factura por su ID
-            var detalle = _context.Detalle_Factura
-                .Include(d => d.Producto)
-                .FirstOrDefault(d => d.Id_Detalle_Factura == detalleId);
-
-           
-
-            // Mapear el detalle a un ViewModel si es necesario
-            var detalleVm = detalle.Adapt<DetalleVm>();
-
-            // Cargar datos adicionales necesarios para la vista (si es necesario)
-            
-            ViewBag.EncabezadoId = detalle.Id_Encabezado_Factura;
-
-            return View(detalleVm);
-        }
-
-
-        [HttpPost]
-        public IActionResult Continuar(Guid encabezadoId)
-        {
-            // Redirigir al método Insertar de Pago con el ID del encabezado
-            return RedirectToAction("Insertar", "Pago", new { encabezadoId = encabezadoId });
-        }
-
-
-
 
         [HttpGet]
         public IActionResult Editar(Guid Id)
