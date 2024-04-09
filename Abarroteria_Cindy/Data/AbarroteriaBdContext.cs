@@ -20,6 +20,7 @@ namespace Abarroteria_Cindy.Data
         public DbSet<Inventario> Inventario { get; set; }
         public DbSet<Proveedor> Proveedor { get; set; }
         public DbSet<Categoria> Categoria { get; set; }
+        public DbSet<Pago> Pago { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
@@ -36,6 +37,7 @@ namespace Abarroteria_Cindy.Data
             modelBuilder.ApplyConfiguration(new InventarioConfig());
             modelBuilder.ApplyConfiguration(new ProveedorConfig());
             modelBuilder.ApplyConfiguration(new CategoriaConfig());
+            modelBuilder.ApplyConfiguration(new PagoConfig());
         }
     }
 }

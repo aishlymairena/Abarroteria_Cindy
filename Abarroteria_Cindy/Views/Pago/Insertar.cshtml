@@ -1,0 +1,72 @@
+﻿@model PagoVm
+@{
+    ViewData["Title"] = "Insertar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Insertar Pago</h1>
+
+<div class="container">
+    <form id="pagoForm" method="post" asp-action="Insertar">
+        <div class="form-group">
+            <label>Número de Factura:</label>
+            <input type="text" value="@Model.NumeroFactura" readonly class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label>Total a Pagar:</label>
+            <input type="text" value="@Model.TotalPagar" readonly class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label>Impuesto:</label>
+            <input type="text" value="@Model.Impuesto" readonly class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label>Monto Recibido:</label>
+            <input type="number" id="montoRecibido" name="MontoRecibido" class="form-control" />
+            <span id="montoRecibidoError" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label>Cambio:</label>
+            <input type="text" id="cambio" name="Cambio" readonly class="form-control" />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Insertar</button>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#montoRecibido').on('input', function () {
+                var montoRecibido = parseFloat($(this).val());
+                var totalPagar = parseFloat('@Model.TotalPagar');
+                var impuesto = parseFloat('@Model.Impuesto');
+
+                if (!isNaN(montoRecibido)) {
+                    var cambio = montoRecibido - totalPagar - impuesto;
+                    $('#cambio').val(cambio.toFixed(2));
+                }
+            });
+
+            $('#pagoForm').submit(function (e) {
+                e.preventDefault(); // Evita que el formulario se envíe automáticamente
+
+                var montoRecibido = parseFloat($('#montoRecibido').val());
+                var totalPagar = parseFloat('@Model.TotalPagar');
+                var impuesto = parseFloat('@Model.Impuesto');
+
+                if (isNaN(montoRecibido) || montoRecibido < totalPagar) {
+                    $('#montoRecibidoError').text('El monto recibido debe ser mayor o igual al total a pagar.');
+                    return;
+                }
+
+               
+                this.submit();
+            });
+        });
+    </script>
+}

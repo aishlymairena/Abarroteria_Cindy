@@ -12,8 +12,9 @@ namespace Abarroteria_Cindy.Data.Entidades
         public bool Eliminado { get; set; }
         public Encabezado_Factura Encabezado_Factura { get; set; }
         public Guid Id_Encabezado_Factura { set; get; }
-        public Guid Id_Producto { set; get; }
         public Producto Producto { get; set; }
+        public Guid Id_Producto { set; get; }
+        
 
     }
     
