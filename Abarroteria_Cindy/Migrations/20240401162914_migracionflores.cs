@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Abarroteria_Cindy.Migrations
 {
-    public partial class migracioninicial : Migration
+    public partial class migracionflores : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
