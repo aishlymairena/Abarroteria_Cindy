@@ -1,5 +1,6 @@
 ﻿using Abarroteria_Cindy.Data;
 using Abarroteria_Cindy.Data.Entidades;
+using Abarroteria_Cindy.Filters;
 using Abarroteria_Cindy.Models;
 using Mapster;
 using Microsoft.AspNetCore.Mvc;
@@ -18,6 +19,7 @@ namespace Abarroteria_Cindy.Controllers
             _logger = logger;
             _context = context;
         }
+        [ClaimRequirement("Factura")]
         public IActionResult Index()
         {
             var factura = _context.Encabezado_Factura.Where(w => w.Eliminado == false).ProjectToType<EncabezadoVm>().ToList();

@@ -1,0 +1,56 @@
+/* Estilos para el contenedor principal */
+.row-6 {
+    margin: 0 auto;
+    max-width: 400px;
+}
+
+/* Estilos para el mensaje de error */
+.alert {
+    background-color: #f2dede;
+    color: #a94442;
+    padding: 15px;
+    margin-bottom: 15px;
+    border: 1px solid #ebccd1;
+    border-radius: 4px;
+}
+
+/* Estilos para el formulario */
+.main {
+    padding-top 50px;
+    background: #f3f3f3;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+/* Estilos para los campos de entrada */
+.form-control {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    box-sizing: border-box;
+}
+
+/* Estilos para el botón de envío */
+.submit input[type="submit"] {
+    background: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+    .submit input[type="submit"]:hover {
+        background: #45a049;
+    }
+
+.clear {
+    clear: both;
+}
+
+/* Estilos para el centro de los elementos */
+.center {
+    text-align: center;
+}

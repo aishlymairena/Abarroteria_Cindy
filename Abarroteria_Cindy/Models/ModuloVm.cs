@@ -8,7 +8,7 @@ namespace Abarroteria_Cindy.Models
         public string Nombre { set; get; }
         public string Metodo { set; get; }
         public string Controller { set; get; }
-        public AgrupadoVm AgrupadoModulos { get; set; }
+  
         public Guid AgrupadoModulosId { get; set; }
     }
 }
