@@ -158,5 +158,16 @@ namespace Abarroteria_Cindy.Controllers
             TempData["mensaje"] = "Producto eliminado correctamente.";
             return RedirectToAction("Index");
         }
+
+        [HttpGet]
+        public IActionResult ObtenerPrecio(Guid productId)
+        {
+            var producto = _context.Producto.FirstOrDefault(p => p.Id_Producto == productId);
+            if (producto != null)
+            {
+                return Json(producto.Precio_Normal);
+            }
+            return Json(null);
+        }
     }
 }

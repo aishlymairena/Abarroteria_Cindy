@@ -1,0 +1,40 @@
+﻿@model DetalleVm
+@{
+    ViewData["Title"] = "DetalleConfirmacion";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Confirmación de Producto</h2>
+
+<input type="hidden" name="Id_Encabezado_Factura" value="@ViewBag.EncabezadoId" />
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <dl class="row">
+                <dt class="col-sm-4">Producto:</dt>
+                <dd class="col-sm-8">@Model.Producto.Nombre</dd>
+
+                <dt class="col-sm-4">Precio:</dt>
+                <dd class="col-sm-8">@Model.Producto.Precio_Normal</dd>
+
+                <dt class="col-sm-4">Cantidad:</dt>
+                <dd class="col-sm-8">@Model.Cantidad</dd>
+
+                <dt class="col-sm-4">Total de Línea:</dt>
+                <dd class="col-sm-8">@Model.Total_Linea</dd>
+            </dl>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <form method="post" asp-action="Continuar">
+                <input type="hidden" name="encabezadoId" value="@ViewBag.EncabezadoId" />
+                <button type="submit" class="btn btn-primary">Continuar al Pago</button>
+            </form>
+        </div>
+    </div>
+</div>
+
