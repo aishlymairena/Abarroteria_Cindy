@@ -99,6 +99,22 @@ namespace Abarroteria_Cindy.Controllers
             return RedirectToAction("Insertar", new { encabezadoId = detalle.Id_Encabezado_Factura });
         }
 
+
+        [HttpGet]
+        public IActionResult ConfirmarDetalle(Guid encabezadoId)
+        {
+            var detalles = _context.Detalle_Factura
+                .Include(d => d.Producto)
+                .Where(d => d.Id_Encabezado_Factura == encabezadoId && !d.Eliminado)
+                .ToList();
+
+            ViewBag.EncabezadoId = encabezadoId;
+
+            return View(detalles);
+        }
+
+
+
         [HttpGet]
         public IActionResult Editar(Guid Id)
         {
@@ -140,28 +156,31 @@ namespace Abarroteria_Cindy.Controllers
             TempData["mensaje"] = "Detalle actualizado correctamente.";
 
             // Redirigir a la acción Index o a cualquier otra acción que desees
-            return RedirectToAction("Index");
+            return RedirectToAction("Editar", new { Id = detalleVm });
         }
+
 
         [HttpPost]
         public IActionResult Eliminar(Guid id)
         {
             var detalle = _context.Detalle_Factura.FirstOrDefault(d => d.Id_Detalle_Factura == id);
-            if (detalle == null)
+            if (detalle != null)
             {
-                return NotFound("No se encontró el detalle de factura.");
+                _context.Detalle_Factura.Remove(detalle);
+                _context.SaveChanges();
+                TempData["mensaje"] = "Detalle eliminado correctamente.";
             }
 
-            // Marcar el detalle como eliminado
-            detalle.Eliminado = true;
+            // Redirigir a la acción ConfirmarDetalle con el ID del encabezado
+            return RedirectToAction("ConfirmarDetalle", new { encabezadoId = detalle.Id_Encabezado_Factura });
 
-            // Guardar los cambios en la base de datos
-            _context.SaveChanges();
+        }
 
-            TempData["mensaje"] = "Detalle eliminado correctamente.";
-
-            // Redirigir a la acción Index o a cualquier otra acción que desees
-            return RedirectToAction("Index");
+        [HttpPost]
+        public IActionResult Continuar(Guid encabezadoId)
+        {
+            // Redirigir al método ConfirmarDetalle con el ID del encabezado
+            return RedirectToAction("ConfirmarDetalle", new { encabezadoId = encabezadoId });
         }
     }
 }

@@ -1,0 +1,51 @@
+﻿@model List<DetalleVm>
+@{
+    ViewData["Title"] = "ConfirmarDetalle";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Confirmar Detalle</h2>
+
+<div class="container">
+    <div class="row">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Precio Unitario</th>
+                    <th>Total</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var detalle in Model)
+                {
+                    <tr>
+                        <td>@detalle.Producto.Nombre</td>
+                        <td>@detalle.Cantidad</td>
+                        <td>@detalle.Producto.Precio_Normal</td>
+                        <td>@detalle.Total_Linea</td>
+                        <td>
+                            <form method="post" asp-action="Editar" asp-route-detalleId="@detalle.Id_Detalle_Factura">
+                                <button type="submit" class="btn btn-primary">Editar</button>
+                            </form>
+                            <form method="post" asp-action="Eliminar" asp-route-detalleId="@detalle.Id_Detalle_Factura">
+                                <button type="submit" class="btn btn-danger">Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <a asp-action="Continuar" asp-route-encabezadoId="@ViewBag.EncabezadoId" class="btn btn-success">Continuar al pago</a>
+        </div>
+    </div>
+</div>
+
