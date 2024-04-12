@@ -44,6 +44,18 @@
                 <span asp-validation-for="Fecha_Nacimiento" class="text-danger"></span>
             </div>
 
+            <script>
+                // Obtener el campo de fecha de nacimiento
+                var fechaNacimientoField = document.getElementById('fechaNacimientoField');
+
+                // Obtener la fecha actual en el formato adecuado (YYYY-MM-DD)
+                var today = new Date().toISOString().split('T')[0];
+
+                // Establecer la fecha actual como valor predeterminado para el campo de fecha de nacimiento
+                fechaNacimientoField.value = today;
+            </script>
+
+
             <div class="form-group">
                 <label asp-for="Telefono" class="control-label"></label>
                 <input asp-for="Telefono" class="form-control" />
