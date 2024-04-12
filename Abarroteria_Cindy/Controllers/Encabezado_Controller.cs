@@ -6,6 +6,8 @@ using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Win32;
+using System.Linq;
 
 namespace Abarroteria_Cindy.Controllers
 {
@@ -25,6 +27,23 @@ namespace Abarroteria_Cindy.Controllers
             var factura = _context.Encabezado_Factura.Where(w => w.Eliminado == false).ProjectToType<EncabezadoVm>().ToList();
             return View(factura);
         }
+
+
+
+        public ActionResult Buscar()
+        {
+            var facturas = _context.Encabezado_Factura.ToList();
+            return View(facturas);
+        }
+
+        // POST: Facturas/SearchByDate
+        [HttpPost]
+        public ActionResult SearchByDate(DateTime searchDate)
+        {
+            var facturasByDate = _context.Encabezado_Factura.Where(f => f.Fecha_Emision == searchDate).ToList();
+            return View("Index", facturasByDate);
+        }
+
 
         [HttpGet]
         public IActionResult Insertar()
@@ -130,7 +149,31 @@ namespace Abarroteria_Cindy.Controllers
         }
 
 
+        private string GenerarNumeroFacturaUnico()
+        {          
+            
+            var random = new Random();
+            var numeroFactura = random.Next(100000, 999999).ToString(); // Número aleatorio de 6 dígitos
+            return numeroFactura;
+        }
+
+        [HttpGet]
+  public IActionResult Ver(Guid Id_Encabezado_factura)
+        {
+            var registro = _context.Encabezado_Factura
+                          .Where(w => w.Id_Encabezado_factura == Id_Encabezado_factura)
+                          .ProjectToType<EncabezadoVm>()
+                          .FirstOrDefault();
+
+            return View(registro);
+        }
+
+
+
+
+
     }
+
 }
 
 
