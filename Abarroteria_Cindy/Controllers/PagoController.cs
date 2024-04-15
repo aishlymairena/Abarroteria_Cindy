@@ -69,7 +69,7 @@ namespace Abarroteria_Cindy.Controllers
                 Impuesto = impuesto,
                 TotalImp = totalImp
             };
-
+          
             return View(pagoVm);
         }
 
