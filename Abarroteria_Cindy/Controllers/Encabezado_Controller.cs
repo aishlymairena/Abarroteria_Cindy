@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
+using Newtonsoft.Json;
 using System.Linq;
 
 namespace Abarroteria_Cindy.Controllers
@@ -22,27 +23,35 @@ namespace Abarroteria_Cindy.Controllers
             _context = context;
         }
         [ClaimRequirement("Factura")]
-        public IActionResult Index()
+        public IActionResult Index(string terminoBusqueda)
         {
             var factura = _context.Encabezado_Factura.Where(w => w.Eliminado == false).ProjectToType<EncabezadoVm>().ToList();
             return View(factura);
         }
 
 
-
-        public ActionResult Buscar()
+        public ActionResult Buscar(string terminoBusqueda)
         {
-            var facturas = _context.Encabezado_Factura.ToList();
-            return View(facturas);
+            var productos = _context.Encabezado_Factura.Where(p => !p.Eliminado);
+
+            if (!string.IsNullOrEmpty(terminoBusqueda))
+            {
+                productos = productos.Where(p => p.Fecha_Emision.ToString().Contains(terminoBusqueda));
+
+            }
+
+            var productosVm = productos.ProjectToType<EncabezadoVm>().ToList();
+
+            return View(productosVm);
         }
 
         // POST: Facturas/SearchByDate
-        [HttpPost]
+       /* [HttpPost]
         public ActionResult SearchByDate(DateTime searchDate)
         {
             var facturasByDate = _context.Encabezado_Factura.Where(f => f.Fecha_Emision == searchDate).ToList();
             return View("Index", facturasByDate);
-        }
+        }*/
 
 
         [HttpGet]
@@ -126,6 +135,10 @@ namespace Abarroteria_Cindy.Controllers
             var fechaActual = DateTime.Now;
             var numeroFactura = $"{fechaActual:yyyyMMdd}-{ObtenerNumeroFactura()}";
 
+            var sesionJson = HttpContext.Session.GetString("UsuarioObjeto");
+            var base64EncodedBytes = System.Convert.FromBase64String(sesionJson);
+            var sesion = System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
+            EmpleadoVm UsuarioObjeto = JsonConvert.DeserializeObject<EmpleadoVm>(sesion);
             var nuevoEncabezado = new Encabezado_Factura
             {
                 Fecha_Emision = fechaActual,
@@ -133,7 +146,10 @@ namespace Abarroteria_Cindy.Controllers
                 RTN = rtnPorDefecto,
                 Id_Empleado = factura.Id_Empleado,
                 Id_Cai = factura.Id_Cai,
-                Id_Cliente = factura.Id_Cliente
+                Id_Cliente = factura.Id_Cliente,
+                CreatedBy = UsuarioObjeto.Id_Empleado, 
+                CreatedDate = DateTime.Now, 
+
             };
 
             _context.Encabezado_Factura.Add(nuevoEncabezado);
@@ -166,6 +182,7 @@ namespace Abarroteria_Cindy.Controllers
                           .FirstOrDefault();
 
             return View(registro);
+
         }
 
 

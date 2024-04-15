@@ -163,5 +163,6 @@ namespace Abarroteria_Cindy.Controllers
             // Redirigir a la acción Index o a cualquier otra acción que desees
             return RedirectToAction("Index");
         }
+       
     }
 }
