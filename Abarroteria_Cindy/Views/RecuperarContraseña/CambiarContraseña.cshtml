@@ -1,10 +1,11 @@
-﻿@model Abarroteria_Cindy.Models.CambiarContraseñaVm
+﻿@model CambiarContraseñaVm
+
 @{
     ViewData["Title"] = "Cambiar Contraseña";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
 }
-<h1 style="text-align: center;">Cambiar Contraseña</h1>
 
+<h1>Cambiar Contraseña</h1>
 
 <div class="container">
     <div class="row">
@@ -12,7 +13,7 @@
             <input asp-for="Id_Empleado" type="hidden" />
 
             <div class="form-group">
-                <label asp-for="ContraseñaAnterior" class="control-label">Contraseña Anterior:</label>
+                <label asp-for="ContraseñaAnterior" class="control-label">Ingrese Contraseña Recibida Al Correo:</label>
                 <input asp-for="ContraseñaAnterior" type="password" class="form-control" />
                 <span asp-validation-for="ContraseñaAnterior" class="text-danger"></span>
             </div>

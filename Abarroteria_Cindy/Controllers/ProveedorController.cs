@@ -3,6 +3,8 @@ using Abarroteria_Cindy.Data;
 using Abarroteria_Cindy.Models;
 using Microsoft.AspNetCore.Mvc;
 using Mapster;
+using Abarroteria_Cindy.Filters;
+using Newtonsoft.Json;
 
 namespace Abarroteria_Cindy.Controllers
 {
@@ -16,7 +18,7 @@ namespace Abarroteria_Cindy.Controllers
             _logger = logger;
             _context = context;
         }
-
+        [ClaimRequirement("Proveedores")]
         public IActionResult Index()
         {
             var proveedor = _context.Proveedor.Where(w => w.Eliminado == false).ProjectToType<ProveedorVm>().ToList();
@@ -24,6 +26,7 @@ namespace Abarroteria_Cindy.Controllers
         }
 
         [HttpGet]
+        [ClaimRequirement("Proveedores")]
         public IActionResult Insertar()
         {
             var proveedor = new ProveedorVm();
@@ -31,6 +34,7 @@ namespace Abarroteria_Cindy.Controllers
         }
 
         [HttpPost]
+        [ClaimRequirement("Proveedores")]
         public IActionResult Insertar(ProveedorVm proveedor)
         {
             if (!ModelState.IsValid)
@@ -38,14 +42,20 @@ namespace Abarroteria_Cindy.Controllers
                 TempData["mensaje"] = "Todos los campos son obligatorios y deben ser válidos.";
                 return View(proveedor);
             }
-
+            var sesionJson = HttpContext.Session.GetString("UsuarioObjeto");
+            var base64EncodedBytes = System.Convert.FromBase64String(sesionJson);
+            var sesion = System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
+            EmpleadoVm UsuarioObjeto = JsonConvert.DeserializeObject<EmpleadoVm>(sesion);
             var nuevoProveedor = new Proveedor
             {
                 Id_Proveedor = Guid.NewGuid(),
                 Nombre = proveedor.Nombre,
                 Telefono = proveedor.Telefono,
                 Correo = proveedor.Correo,
-                Direccion = proveedor.Direccion
+                Direccion = proveedor.Direccion,
+                CreatedBy = UsuarioObjeto.Id_Empleado, // Debes establecer el valor correcto para CreatedBy
+                CreatedDate = DateTime.Now, // Debes establecer el valor correcto para CreatedDate
+                Eliminado = false // Por defecto, no está eliminado
             };
 
             _context.Proveedor.Add(nuevoProveedor);
@@ -55,6 +65,7 @@ namespace Abarroteria_Cindy.Controllers
         }
 
         [HttpGet]
+        [ClaimRequirement("Proveedores")]
         public IActionResult Editar(Guid Id_Proveedor)
         {
             var registro = _context.Proveedor
@@ -66,6 +77,7 @@ namespace Abarroteria_Cindy.Controllers
         }
 
         [HttpPost]
+        [ClaimRequirement("Proveedores")]
         public IActionResult Editar(ProveedorVm proveedor)
         {
             
@@ -84,6 +96,7 @@ namespace Abarroteria_Cindy.Controllers
         }
 
         [HttpGet]
+        [ClaimRequirement("Proveedores")]
         public IActionResult Eliminar(Guid Id_Proveedor)
         {
 
@@ -95,6 +108,7 @@ namespace Abarroteria_Cindy.Controllers
             return View(registro);
         }
         [HttpPost]
+        [ClaimRequirement("Proveedores")]
         public IActionResult Eliminar(ProveedorVm registros)
         {
 

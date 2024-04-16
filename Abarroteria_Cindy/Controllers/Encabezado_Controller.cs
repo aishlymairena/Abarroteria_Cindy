@@ -1,12 +1,19 @@
 ﻿using Abarroteria_Cindy.Data;
 using Abarroteria_Cindy.Data.Entidades;
+using Abarroteria_Cindy.Filters;
 using Abarroteria_Cindy.Models;
 using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+
 using System.Security.Cryptography;
 using System.Text;
+
+using Microsoft.Win32;
+using Newtonsoft.Json;
+using System.Linq;
+
 
 namespace Abarroteria_Cindy.Controllers
 {
@@ -20,11 +27,37 @@ namespace Abarroteria_Cindy.Controllers
             _logger = logger;
             _context = context;
         }
-        public IActionResult Index()
+        [ClaimRequirement("Factura")]
+        public IActionResult Index(string terminoBusqueda)
         {
             var factura = _context.Encabezado_Factura.Where(w => w.Eliminado == false).ProjectToType<EncabezadoVm>().ToList();
             return View(factura);
         }
+
+
+        public ActionResult Buscar(string terminoBusqueda)
+        {
+            var productos = _context.Encabezado_Factura.Where(p => !p.Eliminado);
+
+            if (!string.IsNullOrEmpty(terminoBusqueda))
+            {
+                productos = productos.Where(p => p.Fecha_Emision.ToString().Contains(terminoBusqueda));
+
+            }
+
+            var productosVm = productos.ProjectToType<EncabezadoVm>().ToList();
+
+            return View(productosVm);
+        }
+
+        // POST: Facturas/SearchByDate
+       /* [HttpPost]
+        public ActionResult SearchByDate(DateTime searchDate)
+        {
+            var facturasByDate = _context.Encabezado_Factura.Where(f => f.Fecha_Emision == searchDate).ToList();
+            return View("Index", facturasByDate);
+        }*/
+
 
         [HttpGet]
         public IActionResult Insertar()
@@ -134,6 +167,10 @@ namespace Abarroteria_Cindy.Controllers
             var fechaActual = DateTime.Now;
             var numeroFactura = GenerarNumeroFactura(caiSeleccionado.Cai);
 
+            var sesionJson = HttpContext.Session.GetString("UsuarioObjeto");
+            var base64EncodedBytes = System.Convert.FromBase64String(sesionJson);
+            var sesion = System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
+            EmpleadoVm UsuarioObjeto = JsonConvert.DeserializeObject<EmpleadoVm>(sesion);
             var nuevoEncabezado = new Encabezado_Factura
             {
                 Fecha_Emision = fechaActual,
@@ -141,7 +178,10 @@ namespace Abarroteria_Cindy.Controllers
                 RTN = "RTN123456789", // RTN por defecto
                 Id_Empleado = factura.Id_Empleado,
                 Id_Cai = factura.Id_Cai,
-                Id_Cliente = factura.Id_Cliente
+                Id_Cliente = factura.Id_Cliente,
+                CreatedBy = UsuarioObjeto.Id_Empleado, 
+                CreatedDate = DateTime.Now, 
+
             };
 
             _context.Encabezado_Factura.Add(nuevoEncabezado);
@@ -152,7 +192,36 @@ namespace Abarroteria_Cindy.Controllers
             var encabezadoId = nuevoEncabezado.Id_Encabezado_factura;
             return RedirectToAction("Insertar", "Detalle", new { encabezadoId = encabezadoId });
         }
+AishlyM
+
+
+        private string GenerarNumeroFacturaUnico()
+        {          
+            
+            var random = new Random();
+            var numeroFactura = random.Next(100000, 999999).ToString(); // Número aleatorio de 6 dígitos
+            return numeroFactura;
+        }
+
+        [HttpGet]
+  public IActionResult Ver(Guid Id_Encabezado_factura)
+        {
+            var registro = _context.Encabezado_Factura
+                          .Where(w => w.Id_Encabezado_factura == Id_Encabezado_factura)
+                          .ProjectToType<EncabezadoVm>()
+                          .FirstOrDefault();
+
+            return View(registro);
+
+        }
+
+
+
+
+
+master
     }
+
 }
 
 

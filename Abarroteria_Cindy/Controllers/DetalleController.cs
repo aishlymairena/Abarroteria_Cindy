@@ -211,5 +211,6 @@ namespace Abarroteria_Cindy.Controllers
             // Redirigir al método ConfirmarDetalle con el ID del encabezado
             return RedirectToAction("ConfirmarDetalle", new { encabezadoId = encabezadoId });
         }
+       
     }
 }

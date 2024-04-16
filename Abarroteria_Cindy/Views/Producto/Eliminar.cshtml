@@ -5,7 +5,7 @@
 }
 
 <div class="container">
-    <h1>Eliminar Producto</h1>
+    <h1 style="text-align: center;">Eliminar Producto</h1>
 
     <div class="row">
         <form method="post" asp-action="Eliminar">
@@ -49,9 +49,10 @@
 
             <div class="form-group">
                 <label asp-for="Id_Categoria" class="control-label">Categoría</label>
-                <input asp-for="Id_Categoria" class="form-control" readonly />
+                <select asp-for="Id_Categoria" class="form-control" asp-items="@(new SelectList(ViewBag.Categorias, "Id_Categoria", "Nombre"))" readonly></select>
                 <span asp-validation-for="Id_Categoria" class="text-danger"></span>
             </div>
+
 
             <div class="form-group">
                 <input type="submit" value="Eliminar" class="btn btn-success" />

@@ -30,18 +30,34 @@
             </div>
 
 
+
             <hr />
 
             <h3>Detalles de la Factura</h3>
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Nombre Producto</th>
-                        <th>Cantidad</th>
-                        <th>Precio Unitario</th>
-                        <th>Total Línea</th>
+                        <th>Total Pagado</th>
+                        <th>Monto Recibido</th>
+                        <th>Cambio Entregado</th>
+                        <th>Impuesto</th>
+
                     </tr>
+                    
                 </thead>
+
+                <tbody>
+                   
+                        <tr>
+                            <td>@Model.Total</td>
+                            <td>@Model.Monto_Entregado</td>
+                            <td>@Model.Cambio</td>
+                            <td>@Model.Impuesto</td>
+
+                        </tr>
+                    
+                </tbody>
+
 
             </table>
             
@@ -50,3 +66,5 @@
 
 
             </form>
+
+                   

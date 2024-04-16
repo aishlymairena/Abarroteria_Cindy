@@ -1,10 +1,11 @@
-﻿@model List<EncabezadoVm>
+﻿
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Buscar";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h1 style="text-align: center;">Facturas</h1>
+
 <form asp-action="Buscar" method="get" class="mb-3">
     <div class="input-group">
         <input type="date" name="terminoBusqueda" class="form-control" placeholder="Buscar Factura por Fecha...">
@@ -26,7 +27,7 @@
         </div>
     </div>
 
-   
+
 
 
 
@@ -48,8 +49,8 @@
                         <th>CAI</th>
                         <th>RTN</th>
                         <th>Empleado</th>
-                        <th>Cliente</th>    
-                       
+                        <th>Cliente</th>
+
                     </tr>
                 </thead>
                 <tbody>
@@ -64,17 +65,17 @@
                             <td>@item.Cliente?.Nombre</td>
 
                             <td>
-                                @Html.ActionLink("Ver", "Ver", "Encabezado_", new { @Id_Encabezado_factura = item.Id_Encabezado_factura }, new { @class = "btn btn - info"})
-                                
+                                @Html.ActionLink("Ver", "Ver", "Encabezado_", new { @Id_Encabezado_factura = item.Id_Encabezado_factura }, new { @class = "btn btn - info" })
+
                             </td>
-                            
+
                         </tr>
                     }
                 </tbody>
             </table>
         </div>
     }
-                
-    
+
+
 </form>
 

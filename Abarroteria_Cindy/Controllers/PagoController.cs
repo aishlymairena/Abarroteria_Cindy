@@ -56,7 +56,7 @@ namespace Abarroteria_Cindy.Controllers
                 TotalImp = totalImp,
                 Id_Encabezado_Factura = encabezadoId
             };
-
+          
             return View(pagoVm);
         }
 
