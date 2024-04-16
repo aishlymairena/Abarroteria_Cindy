@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Abarroteria_Cindy.Migrations
 {
-    public partial class inicial : Migration
+    public partial class inicial1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -77,25 +77,6 @@ namespace Abarroteria_Cindy.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Cliente", x => x.Id_Cliente);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Pago",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    NumeroFactura = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Impuesto = table.Column<double>(type: "float", nullable: false),
-                    TotalPagar = table.Column<double>(type: "float", nullable: false),
-                    MontoRecibido = table.Column<double>(type: "float", nullable: false),
-                    Cambio = table.Column<double>(type: "float", nullable: false),
-                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Eliminado = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Pago", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -339,6 +320,33 @@ namespace Abarroteria_Cindy.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Pago",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    NumeroFactura = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Impuesto = table.Column<double>(type: "float", nullable: false),
+                    TotalPagar = table.Column<double>(type: "float", nullable: false),
+                    MontoRecibido = table.Column<double>(type: "float", nullable: false),
+                    Cambio = table.Column<double>(type: "float", nullable: false),
+                    TotalImp = table.Column<double>(type: "float", nullable: false),
+                    Id_Encabezado_Factura = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Eliminado = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Pago", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Pago_Encabezado_Factura_Id_Encabezado_Factura",
+                        column: x => x.Id_Encabezado_Factura,
+                        principalTable: "Encabezado_Factura",
+                        principalColumn: "Id_Encabezado_factura",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Detalle_Factura_Id_Encabezado_Factura",
                 table: "Detalle_Factura",
@@ -395,6 +403,11 @@ namespace Abarroteria_Cindy.Migrations
                 column: "RolId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Pago_Id_Encabezado_Factura",
+                table: "Pago",
+                column: "Id_Encabezado_Factura");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Producto_Id_Categoria",
                 table: "Producto",
                 column: "Id_Categoria");
@@ -415,9 +428,6 @@ namespace Abarroteria_Cindy.Migrations
                 name: "Pago");
 
             migrationBuilder.DropTable(
-                name: "Encabezado_Factura");
-
-            migrationBuilder.DropTable(
                 name: "Producto");
 
             migrationBuilder.DropTable(
@@ -427,6 +437,15 @@ namespace Abarroteria_Cindy.Migrations
                 name: "Modulo");
 
             migrationBuilder.DropTable(
+                name: "Encabezado_Factura");
+
+            migrationBuilder.DropTable(
+                name: "Categoria");
+
+            migrationBuilder.DropTable(
+                name: "AgrupadoModulos");
+
+            migrationBuilder.DropTable(
                 name: "CAI");
 
             migrationBuilder.DropTable(
@@ -434,12 +453,6 @@ namespace Abarroteria_Cindy.Migrations
 
             migrationBuilder.DropTable(
                 name: "Empleado");
-
-            migrationBuilder.DropTable(
-                name: "Categoria");
-
-            migrationBuilder.DropTable(
-                name: "AgrupadoModulos");
 
             migrationBuilder.DropTable(
                 name: "Rol");

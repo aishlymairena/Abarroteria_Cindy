@@ -12,9 +12,15 @@ namespace Abarroteria_Cindy.Models
         public double Cambio { get; set; }
 
         public double TotalImp { get; set; }
+ AishlyM
+        public EncabezadoVm Encabezado_Factura { get; set; }
+        
+        public Guid Id_Encabezado_Factura { set; get; }
+=======
 
         public EncabezadoVm Encabezado { get; set; }
         public Guid Id_Encabezado_Factura { get; set; }
+master
 
         public Guid CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }

@@ -11,6 +11,7 @@ namespace Abarroteria_Cindy.Models
         public Guid Id_Encabezado_Factura { set; get; }
         public ProductoVm Producto { get; set; }
         public Guid Id_Producto { set; get; }
+       
         public bool Validacion()
         {
             if (Cantidad <= 0)
