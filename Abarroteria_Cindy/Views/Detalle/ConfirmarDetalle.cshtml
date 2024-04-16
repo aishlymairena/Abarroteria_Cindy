@@ -4,48 +4,80 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Confirmar Detalle</h2>
+<h1>Confirmar Detalle</h1>
 
-<div class="container">
-    <div class="row">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Producto</th>
-                    <th>Cantidad</th>
-                    <th>Precio Unitario</th>
-                    <th>Total</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var detalle in Model)
-                {
-                    <tr>
-                        <td>@detalle.Producto.Nombre</td>
-                        <td>@detalle.Cantidad</td>
-                        <td>@detalle.Producto.Precio_Normal</td>
-                        <td>@detalle.Total_Linea</td>
-                        <td>
-                            <form method="post" asp-action="Editar" asp-route-detalleId="@detalle.Id_Detalle_Factura">
-                                <button type="submit" class="btn btn-primary">Editar</button>
-                            </form>
-                            <form method="post" asp-action="Eliminar" asp-route-detalleId="@detalle.Id_Detalle_Factura">
-                                <button type="submit" class="btn btn-danger">Eliminar</button>
-                            </form>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-</div>
+<div class="modal fade" id="confirmarDetalleModal" tabindex="-1" role="dialog" aria-labelledby="confirmarDetalleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmarDetalleModalLabel">Confirmar Detalle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="cerrarModal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Precio Unitario</th>
+                            <th>Total</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var detalle in Model)
+                        {
+                            <tr>
+                                <td>@(detalle.Producto != null ? detalle.Producto.Nombre : "")</td>
+                                <td>@detalle.Cantidad</td>
+                                <td>@(detalle.Producto != null && detalle.Cantidad > 12 ? detalle.Producto.Precio_Mayorista.ToString() : detalle.Producto != null ? detalle.Producto.Precio_Normal.ToString() : "")</td>
+                                <td>@detalle.Total_Linea</td>
+                                <td>
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <a asp-action="Continuar" asp-route-encabezadoId="@ViewBag.EncabezadoId" class="btn btn-success">Continuar al pago</a>
+                                    <div class="btn-group" role="group" aria-label="Acciones">
+                                        <div class="btn-group" role="group" aria-label="Acciones">
+                                            <form method="post" action="@Url.Action("Eliminar", "Detalle", new { id = detalle.Id_Detalle_Factura })">
+                                                <button type="submit" class="btn btn-danger">Eliminar</button>
+                                            </form>
+                                        <a href="@Url.Action("Editar", "Detalle", new { id = detalle.Id_Detalle_Factura })" class="btn btn-primary">Editar</a>
+                                        
+                                    </div>
+                                </td>
+                            </tr>
+
+
+
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                
+
+                <a href="@Url.Action("Insertar", "Pago", new { encabezadoId = ViewBag.EncabezadoId })" class="btn btn-success">Continuar al Pago</a>
+            </div>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        $(function () {
+            $('#confirmarDetalleModal').modal('show');
+
+            
+            $('#cerrarModal').click(function () {
+                window.location.href = '@Url.Action("Insertar", "Detalle", new { encabezadoId = ViewBag.EncabezadoId })';
+            });
+
+            $('#Editar').click(function () {
+                $('#confirmarDetalleModal').modal('hide');
+              
+                window.location.href = '@Url.Action("ConfirmarDetalle", "Detalle")?encabezadoId=@ViewBag.EncabezadoId';
+            });
+        });
+    </script>
+}
 

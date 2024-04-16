@@ -166,6 +166,7 @@ namespace Abarroteria_Cindy.Data
         {
             public void Configure(EntityTypeBuilder<Pago> builder)
             {
+               
                 builder.HasKey(x => x.Id);
                 builder.Property(x => x.NumeroFactura).IsRequired();
                 builder.Property(x => x.Impuesto).IsRequired();
@@ -175,6 +176,10 @@ namespace Abarroteria_Cindy.Data
                 builder.Property(x => x.TotalImp).IsRequired();
 
                 // Relación con la entidad Encabezado_Factura
+                builder.HasOne(d => d.Encabezado_Factura)
+                       .WithMany(e => e.Pagos)
+                       .HasForeignKey(d => d.Id_Encabezado_Factura)
+                       .IsRequired();
 
 
             }
