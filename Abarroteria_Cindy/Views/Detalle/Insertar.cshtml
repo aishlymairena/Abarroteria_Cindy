@@ -4,11 +4,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+
 <h2>Agregar Nuevo Detalle de Factura</h2>
 
 <div class="container">
-   
-
     <div class="row">
         <form method="post" asp-action="Insertar">
             <div class="row">
@@ -27,15 +26,17 @@
 
             <input type="hidden" name="Id_Encabezado_Factura" value="@ViewBag.EncabezadoId" />
 
-
-
             <div class="form-group">
                 <label for="Id_Producto">Producto:</label>
                 <select class="form-control" id="Id_Producto" name="Id_Producto">
                     <option value="">-- Seleccione un Producto --</option>
                     @foreach (var producto in ViewBag.Productos)
                     {
-                        <option value="@producto.Id_Producto">@producto.Nombre</option>
+                        <option value="@producto.Id_Producto"
+                                data-precio-normal="@producto.Precio_Normal"
+                                data-precio-mayorista="@producto.Precio_Mayorista">
+                            @producto.Nombre
+                        </option>
                     }
                 </select>
             </div>
@@ -54,36 +55,32 @@
                 <label for="Total_Linea">Total de Línea:</label>
                 <input type="text" class="form-control" id="Total_Linea" readonly />
             </div>
-            <button type="submit" class="btn btn-primary">Agregar Producto</button>
-            <a href="@Url.Action("Insertar", "Pago", new { encabezadoId = ViewBag.EncabezadoId })" class="btn btn-success">Continuar al Pago</a>
-        </form>
-    </div>
-        
-    </div>
-</div>
 
-        
+            <div class="form-group">
+                <div class="btn-group" role="group" aria-label="Botones de acción">
+                    <a href="@Url.Action("ConfirmarDetalle", "Detalle", new { encabezadoId = ViewBag.EncabezadoId })" class="btn btn-primary">Confirmar Detalle</a>
+                    <input type="submit" value="Agregar Producto" class="btn btn-primary" id="btnAgregarProducto" />
+                    
+                </div>
+            </div>
+        </form>
     </div>
 </div>
 
 @section Scripts {
     <script>
-        $(function () {
+        $(document).ready(function () {
             $('#Id_Producto, #Cantidad').change(function () {
                 var productId = $('#Id_Producto').val();
                 var quantity = $('#Cantidad').val();
-                if (productId && quantity) {
-                    $.ajax({
-                        url: '/Producto/ObtenerPrecio',
-                        type: 'GET',
-                        data: { productId: productId },
-                        success: function (data) {
-                            var price = data;
-                            var totalLinea = price * quantity;
-                            $('#Precio').val(price);
-                            $('#Total_Linea').val(totalLinea);
-                        }
-                    });
+                var price = $('#Id_Producto option:selected').data('precio-normal');
+                if (parseInt(quantity) > 12) {
+                    price = $('#Id_Producto option:selected').data('precio-mayorista');
+                }
+                if (!isNaN(price) && !isNaN(quantity)) {
+                    var totalLinea = price * quantity;
+                    $('#Precio').val(price);
+                    $('#Total_Linea').val(totalLinea);
                 }
             });
         });

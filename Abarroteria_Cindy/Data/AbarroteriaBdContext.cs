@@ -14,6 +14,7 @@ namespace Abarroteria_Cindy.Data
         public DbSet<Empleado> Empleado { get; set; }
         public DbSet<Encabezado_Factura> Encabezado_Factura { get; set; }
         public DbSet<CAI> CAI { get; set; }
+       
         public DbSet<Cliente> Cliente { get; set; }
         public DbSet<Detalle_Factura> Detalle_Factura { get; set; }
         public DbSet<Producto> Producto { get; set; }
@@ -23,6 +24,7 @@ namespace Abarroteria_Cindy.Data
         public DbSet<Pago> Pago { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<CAI>().HasKey(c => c.Id_Cai);
 
             modelBuilder.ApplyConfiguration(new RolConfig());
             modelBuilder.ApplyConfiguration(new ModuloConfig());

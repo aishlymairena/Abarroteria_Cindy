@@ -1,0 +1,42 @@
+﻿@model DetalleVm
+@{
+    ViewData["Title"] = "Eliminar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Eliminar</h1>
+<div class="row">
+    <form method="post" asp-action="Eliminar">
+        <div class="row">
+            <div class="danger">
+                @if (TempData["mensaje"] != null)
+                {
+                    <div class="alert alert-warning alert-dismissible" role="alert">
+                        <p> @TempData["mensaje"]</p>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="close">
+                            <span aria-hidden="true">&times;</span>
+
+                        </button>
+                    </div>
+                }
+            </div>
+
+
+        <div class="col-md-12">
+            <p>¿Estás seguro de que deseas eliminar el detalle seleccionado?</p>
+            <dl class="dl-horizontal">
+                <dt>Producto:</dt>
+                <dd>@Model.Producto.Nombre</dd>
+                <dt>Cantidad:</dt>
+                <dd>@Model.Cantidad</dd>
+                <dt>Total de Línea:</dt>
+                <dd>@Model.Total_Linea</dd>
+            </dl>
+            
+                <button type="submit" class="btn btn-danger">Eliminar</button>
+                <a href="@Url.Action("ConfirmarDetalle", "Detalle", new { encabezadoId = TempData["encabezadoId"] })" class="btn btn-primary">Cancelar</a>
+            </form>
+        </div>
+    </div>
+</div>
+
