@@ -5,7 +5,7 @@
 }
 
 <div class="container">
-    <h1>Nuevo Empleado</h1>
+    <h1 style="text-align: center;">Nuevo Empleado</h1>
 
     <div class="row">
         <form method="post" asp-action="Insertar">
@@ -25,6 +25,9 @@
 
             </div>
             <input asp-for="Id_Empleado" type="hidden" class="form-control" />
+
+
+
             <div class="form-group">
                 <label asp-for="Nombre" class="control-label"></label>
                 <input asp-for="Nombre" class="form-control" />

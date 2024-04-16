@@ -5,6 +5,7 @@
 }
 
 <form asp-action="Insertar" method="get">
+    <h1 style="text-align: center;">Productos</h1>
     <div class="row">
         <div class="col-md-12">
             @if (TempData["mensaje"] != null)
@@ -24,7 +25,7 @@
 </form>
 
 <div class="container">
-    <h1>Listado de Productos</h1>
+    
 
     <!-- Formulario de búsqueda -->
     <form asp-action="Index" method="get" class="mb-3">

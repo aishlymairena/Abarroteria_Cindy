@@ -4,7 +4,7 @@
 
 namespace Abarroteria_Cindy.Migrations
 {
-    public partial class inicial03 : Migration
+    public partial class migracioninicial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

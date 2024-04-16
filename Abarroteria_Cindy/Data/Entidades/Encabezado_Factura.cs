@@ -19,10 +19,15 @@
         public Guid Id_Cliente { set; get; }
         public CAI CAI { get; set; }
         public Guid Id_Cai { set; get; }
+       
         public ICollection<Detalle_Factura> Detalles { get; set; }
+        public ICollection<Pago> Pagos { get; set; }
+
         public Encabezado_Factura()
         {
             Detalles = new HashSet<Detalle_Factura>();
+            Pagos = new HashSet<Pago>();
+
         }
     }
 }

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Abarroteria_Cindy.Migrations
 {
     [DbContext(typeof(AbarroteriaBdContext))]
-    [Migration("20240401162914_migracionflores")]
-    partial class migracionflores
+    [Migration("20240409182457_migracioninicial")]
+    partial class migracioninicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -229,7 +229,7 @@ namespace Abarroteria_Cindy.Migrations
                     b.Property<bool>("Eliminado")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("Fecha_Nacimiento")
+                    b.Property<DateTime?>("Fecha_Nacimiento")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Nombre")

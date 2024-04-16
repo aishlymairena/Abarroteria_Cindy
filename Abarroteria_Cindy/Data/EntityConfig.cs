@@ -101,10 +101,25 @@ namespace Abarroteria_Cindy.Data
             public void Configure(EntityTypeBuilder<Detalle_Factura> builder)
             {
                 builder.HasKey(x => x.Id_Detalle_Factura);
+                builder.Property(x => x.Cantidad).IsRequired();
+                builder.Property(x => x.Total_Linea).IsRequired();
 
-            }
+                // Relación con la entidad Encabezado_Factura
+                builder.HasOne(d => d.Encabezado_Factura)
+                       .WithMany(e => e.Detalles)
+                       .HasForeignKey(d => d.Id_Encabezado_Factura)
+                       .IsRequired();
 
+                // Relación con la entidad Producto
+                builder.HasOne(d => d.Producto)
+                       .WithMany(p => p.Detalles)
+                       .HasForeignKey(d => d.Id_Producto)
+                       .IsRequired();
+
+            } 
         }
+
+
         public class ProductoConfig : IEntityTypeConfiguration<Producto>
         {
             public void Configure(EntityTypeBuilder<Producto> builder)
@@ -144,6 +159,29 @@ namespace Abarroteria_Cindy.Data
                 builder.HasMany(a => a.Inventarios).WithOne(a => a.Proveedor).HasForeignKey(c => c.Id_Proveedor);
                 builder.Property(s => s.Nombre).HasColumnType("Varchar(60)").HasColumnName("Nombre");
                 builder.Property(s => s.Direccion).HasColumnType("Varchar(255)").HasColumnName("Direccion");
+            }
+        }
+
+        public class PagoConfig : IEntityTypeConfiguration <Pago>
+        {
+            public void Configure(EntityTypeBuilder<Pago> builder)
+            {
+               
+                builder.HasKey(x => x.Id);
+                builder.Property(x => x.NumeroFactura).IsRequired();
+                builder.Property(x => x.Impuesto).IsRequired();
+                builder.Property(x => x.TotalPagar).IsRequired();
+                builder.Property(x => x.MontoRecibido).IsRequired();
+                builder.Property(x => x.Cambio).IsRequired();
+                builder.Property(x => x.TotalImp).IsRequired();
+
+                // Relación con la entidad Encabezado_Factura
+                builder.HasOne(d => d.Encabezado_Factura)
+                       .WithMany(e => e.Pagos)
+                       .HasForeignKey(d => d.Id_Encabezado_Factura)
+                       .IsRequired();
+
+
             }
 
         }

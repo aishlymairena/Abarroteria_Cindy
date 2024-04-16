@@ -4,5 +4,6 @@
     {
         public Guid Id { set; get; }
         public string Descripcion { set; get; }
+        public List<ModuloVm> Modulos { get; set; }
     }
 }

@@ -1,0 +1,96 @@
+﻿@model PagoVm
+@{
+    ViewData["Title"] = "Insertar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Insertar Pago</h1>
+<div class="container">
+    <div class="row">
+        <form method="post" asp-action="Insertar">
+            <div class="row">
+                <div class="danger">
+                    @if (TempData["mensaje"] != null)
+                    {
+                        <div class="alert alert-warning alert-dismissible" role="alert">
+                            <p> @TempData["mensaje"]</p>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <input type="hidden" name="Id_Encabezado_Factura" value="@Model.Encabezado_Factura.Id_Encabezado_factura" />
+
+
+
+
+            <div class="form-group">
+                <label>Número de Factura:</label>
+                <input type="text" value="@Model.NumeroFactura" readonly class="form-control" />
+            </div>
+
+
+        
+
+        <div class="form-group">
+            <label>Total a Pagar:</label>
+            <input type="text" value="@Model.TotalPagar" readonly class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label>Impuesto:</label>
+            <input type="text" value="@Model.Impuesto" readonly class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label>Total a Pagar + Impuesto:</label>
+            <input type="text" id="totalimp" value="@Model.TotalImp" readonly class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label>Monto Recibido:</label>
+            <input type="number" id="montoRecibido" name="MontoRecibido" class="form-control" />
+            <span id="montoRecibidoError" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label>Cambio:</label>
+            <input type="text" id="cambio" name="Cambio" readonly class="form-control" />
+        </div>
+
+            <input type="submit" value="Agregar" class="btn-success" style="background-color: #94D3F6; color: black;" />
+    </form>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#montoRecibido').on('input', function () {
+                var montoRecibido = parseFloat($(this).val());
+                var totalPagarConImpuesto = parseFloat('@Model.TotalImp');
+
+                if (!isNaN(montoRecibido)) {
+                    var cambio = montoRecibido - totalPagarConImpuesto;
+                    $('#cambio').val(cambio.toFixed(2));
+                }
+            });
+
+            $('#pagoForm').submit(function (e) {
+                e.preventDefault();
+
+                var montoRecibido = parseFloat($('#montoRecibido').val());
+                var totalPagarConImpuesto = parseFloat('@Model.TotalImp');
+
+                if (isNaN(montoRecibido) || montoRecibido < totalPagarConImpuesto) {
+                    $('#montoRecibidoError').text('El monto recibido debe ser mayor o igual al total a pagar más impuesto.');
+                    return;
+                }
+
+                this.submit();
+            });
+        });
+    </script>
+}

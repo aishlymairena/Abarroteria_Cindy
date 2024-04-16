@@ -1,0 +1,91 @@
+﻿@model EmpleadoVm
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+}
+
+<div class="row-6">
+
+    @if (!string.IsNullOrEmpty(ViewBag.Error))
+    {
+        <div class="@ViewBag.ClaseMensaje" role="alert" id="success-alert">
+            <strong> @ViewBag.Error</strong>
+        </div>
+    }
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <div class="main">
+        <div class="inset">
+            <!-----start main------->
+            <center>
+                @*<img src="~/Imagenes/Logo.png" alt="LogoEndodent" height="150"*@
+            </center>
+            <form method="post" asp-action="Index">
+                <div>
+                    <label asp-for="Correo" class="control-label"></label>
+                    <input asp-for="Correo" class="form-control" />
+                    <span asp-validation-for="Correo" class="text-danger"></span>
+
+                </div>
+                <div>
+                    <label asp-for="Contraseña" class="control-label"></label>
+                    <input asp-for="Contraseña" id="contrasenaInput" type="password" class="form-control" />
+                    <span asp-validation-for="Contraseña" class="text-danger"></span>
+                    <div class="text-center">
+                        <button type="button" id="mostrarContrasenaBtn" class="btn btn-primary">Mostrar Contraseña</button>
+                    </div>
+
+                </div>
+
+                @section Scripts {
+                    <script>
+                        document.getElementById("mostrarContrasenaBtn").addEventListener("click", function () {
+                            var contrasenaInput = document.getElementById("contrasenaInput");
+
+                            // Verificar si el tipo de input es password
+                            if (contrasenaInput.type === "password") {
+                                // Si es de tipo password, cambiarlo a text para mostrar la contraseña
+                                contrasenaInput.type = "text";
+                                // Cambiar el texto del botón a "Ocultar Contraseña"
+                                this.textContent = "Ocultar Contraseña";
+                            } else {
+                                // Si ya es de tipo text, cambiarlo a password para ocultar la contraseña
+                                contrasenaInput.type = "password";
+                                // Cambiar el texto del botón a "Mostrar Contraseña"
+                                this.textContent = "Mostrar Contraseña";
+                            }
+                        });
+                    </script>
+                }
+
+
+
+
+                <br />
+                <div class="sign" >
+                    <div class="submit text-center">
+                        <input type="submit" value="Iniciar Sesion" />
+                    </div>
+                    <div class="clear"><br /><br /></div>
+                </div>
+                <div>
+                    <a href="@Url.Action("Index", "RecuperarContraseña")">¿Olvidaste tu contraseña?</a>
+                </div>
+            </form>
+
+
+
+        </div>
+        <!-----end main----->
+    </div>
+
+
+</div>
+<br />
+<br />
+<br />
+<br />

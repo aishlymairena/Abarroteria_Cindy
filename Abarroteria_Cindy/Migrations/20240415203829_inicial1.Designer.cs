@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Abarroteria_Cindy.Migrations
 {
     [DbContext(typeof(AbarroteriaBdContext))]
-    [Migration("20240402192427_inicial")]
-    partial class inicial
+    [Migration("20240415203829_inicial1")]
+    partial class inicial1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -421,6 +421,50 @@ namespace Abarroteria_Cindy.Migrations
                     b.ToTable("ModulosRoles");
                 });
 
+            modelBuilder.Entity("Abarroteria_Cindy.Data.Entidades.Pago", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<double>("Cambio")
+                        .HasColumnType("float");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("Eliminado")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("Id_Encabezado_Factura")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<double>("Impuesto")
+                        .HasColumnType("float");
+
+                    b.Property<double>("MontoRecibido")
+                        .HasColumnType("float");
+
+                    b.Property<string>("NumeroFactura")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("TotalImp")
+                        .HasColumnType("float");
+
+                    b.Property<double>("TotalPagar")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Id_Encabezado_Factura");
+
+                    b.ToTable("Pago");
+                });
+
             modelBuilder.Entity("Abarroteria_Cindy.Data.Entidades.Producto", b =>
                 {
                     b.Property<Guid>("Id_Producto")
@@ -625,6 +669,17 @@ namespace Abarroteria_Cindy.Migrations
                     b.Navigation("Rol");
                 });
 
+            modelBuilder.Entity("Abarroteria_Cindy.Data.Entidades.Pago", b =>
+                {
+                    b.HasOne("Abarroteria_Cindy.Data.Entidades.Encabezado_Factura", "Encabezado_Factura")
+                        .WithMany("Pagos")
+                        .HasForeignKey("Id_Encabezado_Factura")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Encabezado_Factura");
+                });
+
             modelBuilder.Entity("Abarroteria_Cindy.Data.Entidades.Producto", b =>
                 {
                     b.HasOne("Abarroteria_Cindy.Data.Entidades.Categoria", "Categoria")
@@ -664,6 +719,8 @@ namespace Abarroteria_Cindy.Migrations
             modelBuilder.Entity("Abarroteria_Cindy.Data.Entidades.Encabezado_Factura", b =>
                 {
                     b.Navigation("Detalles");
+
+                    b.Navigation("Pagos");
                 });
 
             modelBuilder.Entity("Abarroteria_Cindy.Data.Entidades.Modulo", b =>
