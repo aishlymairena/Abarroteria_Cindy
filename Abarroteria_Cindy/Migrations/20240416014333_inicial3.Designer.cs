@@ -4,6 +4,7 @@ using Abarroteria_Cindy.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Abarroteria_Cindy.Migrations
 {
     [DbContext(typeof(AbarroteriaBdContext))]
-    partial class AbarroteriaBdContextModelSnapshot : ModelSnapshot
+    [Migration("20240416014333_inicial3")]
+    partial class inicial3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -256,6 +258,9 @@ namespace Abarroteria_Cindy.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("Cambio")
+                        .HasColumnType("int");
+
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
 
@@ -277,15 +282,24 @@ namespace Abarroteria_Cindy.Migrations
                     b.Property<Guid>("Id_Empleado")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<decimal>("Impuesto")
+                        .HasColumnType("decimal (10,2)")
+                        .HasColumnName("Impuesto");
+
+                    b.Property<int>("Monto_Entregado")
+                        .HasColumnType("int");
+
                     b.Property<string>("NumeroFactura")
                         .IsRequired()
-                        .HasColumnType("Varchar(14)")
-                        .HasColumnName("NumeroFactura");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RTN")
                         .IsRequired()
                         .HasColumnType("Varchar(14)")
                         .HasColumnName("DNI");
+
+                    b.Property<int>("Total")
+                        .HasColumnType("int");
 
                     b.HasKey("Id_Encabezado_factura");
 

@@ -6,30 +6,29 @@
 
 
 
-<h1>Ver</h1>
 
-<form method="get" asp-action="Ver">
+
+
         <div class="container">
         <h1>Ver Encabezado de Factura </h1>
 
-    <div class="row">
-        
 
 
-            <div>
-                <h4>Fecha de Emisión:</h4>
-                <p>@Model.Fecha_Emision</p>
+
+            <div class="row">
+                <div>
+                    <h4>Fecha de Emisión:</h4>
+                    <p>@Model.Fecha_Emision</p>
+                </div>
+                <div>
+                    <h4>Número de Factura:</h4>
+                    <p>@Model.NumeroFactura</p>
+                </div>
+                <div>
+                    <h4>RTN:</h4>
+                    <p>@Model.RTN</p>
+                </div>
             </div>
-            <div>
-                <h4>Número de Factura:</h4>
-                <p>@Model.NumeroFactura</p>
-            </div>
-            <div>
-                <h4>RTN:</h4>
-                <p>@Model.RTN</p>
-            </div>
-
-
 
             <hr />
 
@@ -37,34 +36,33 @@
             <table class="table">
                 <thead>
                     <tr>
+                
                         <th>Total Pagado</th>
                         <th>Monto Recibido</th>
                         <th>Cambio Entregado</th>
                         <th>Impuesto</th>
-
                     </tr>
-                    
                 </thead>
-
                 <tbody>
-                   
-                        <tr>
-                            <td>@Model.Total</td>
-                            <td>@Model.Monto_Entregado</td>
-                            <td>@Model.Cambio</td>
-                            <td>@Model.Impuesto</td>
+                    @foreach (var pago in Model.Pagos)
+                    {
+                        
 
+
+                        <tr>
+                        <td>@pago.TotalPagar.ToString("0.00")</td>
+                        <td>@pago.MontoRecibido.ToString("0.00")</td>
+                        <td>@pago.Cambio.ToString("0.00")</td>
+                        <td>@pago.Impuesto.ToString("0.00")</td>
                         </tr>
-                    
+                    }
+
+
                 </tbody>
 
-
             </table>
-            
 
             <a asp-action="Index" class="btn btn-primary">Volver a la lista</a>
-
-
-            </form>
+        </div>
 
                    
