@@ -23,13 +23,9 @@ namespace Abarroteria_Cindy.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            var pago = _context.Pago.Where(w => w.Eliminado == false).ProjectToType<PagoVm>().ToList();
-            return View(pago);
+            var pagos = _context.Pago.Where(p => !p.Eliminado).ProjectToType<PagoVm>().ToList();
+            return View(pagos);
         }
-
-
-
-
 
         [HttpGet]
         public IActionResult Insertar(Guid encabezadoId)
@@ -43,73 +39,72 @@ namespace Abarroteria_Cindy.Controllers
                 return RedirectToAction("Index", "Encabezado_");
             }
 
-            var totalPagar = encabezado.Detalles.Sum(detalle => detalle.Total_Linea);
-            var impuesto = totalPagar * 0.15;
-            var totalImp = totalPagar + impuesto;
-
             var pagoVm = new PagoVm
             {
-                Encabezado_Factura = new EncabezadoVm(), // Inicializar la propiedad Encabezado_Factura
-                NumeroFactura = encabezado.NumeroFactura,
-                TotalPagar = totalPagar,
-                Impuesto = impuesto,
-                TotalImp = totalImp,
-                Id_Encabezado_Factura = encabezadoId
+                Id_Encabezado_factura = encabezadoId,
+                TotalPagar = encabezado.Detalles.Sum(detalle => detalle.Total_Linea),
+                Impuesto = encabezado.Detalles.Sum(detalle => detalle.Total_Linea) * 0.15,
+                Detalles = encabezado.Detalles.ToList()
             };
-          
+
             return View(pagoVm);
         }
 
         [HttpPost]
         public IActionResult Insertar(PagoVm pagoVm)
         {
-            // Obtener el encabezado de factura asociado al ID proporcionado en el objeto PagoVm
-            var encabezado = _context.Encabezado_Factura
-                .Include(e => e.Detalles)
-                .FirstOrDefault(e => e.Id_Encabezado_factura == pagoVm.Id_Encabezado_Factura);
+           
+                var encabezado = _context.Encabezado_Factura
+                    .Include(e => e.Detalles)
+                    .FirstOrDefault(e => e.Id_Encabezado_factura == pagoVm.Id_Encabezado_factura);
 
-            if (encabezado == null)
-            {
-                // Si no se encuentra el encabezado, redirigir al index de Encabezado_Factura
-                return RedirectToAction("Index", "Encabezado_");
+                if (encabezado == null)
+                {
+                    return RedirectToAction("Index", "Encabezado_");
+                }
+
+                var totalPagar = encabezado.Detalles.Sum(detalle => detalle.Total_Linea);
+                var impuesto = totalPagar * 0.15;
+                var totalimp = totalPagar + impuesto;
+
+                if (pagoVm.MontoRecibido < totalimp)
+                {
+                    ModelState.AddModelError("MontoRecibido", "El monto recibido debe ser mayor o igual al total a pagar más impuesto.");
+                    return View(pagoVm);
+                }
+
+                var cambio = pagoVm.MontoRecibido - totalimp;
+
+                var pago = new Pago
+                {
+                    Id = Guid.NewGuid(),
+                    Impuesto = impuesto,
+                    TotalPagar = totalPagar,
+                    MontoRecibido = pagoVm.MontoRecibido,
+                    Cambio = cambio,
+                    TotalImp = totalimp,
+                    Id_Encabezado_Factura = encabezado.Id_Encabezado_factura,
+                    NumeroFactura = encabezado.NumeroFactura,
+                    CreatedBy = pagoVm.CreatedBy,
+                    CreatedDate = DateTime.Now,
+                    Eliminado = pagoVm.Eliminado
+                };
+
+                // Asignar los valores de impuesto, total más impuesto y cambio al objeto pagoVm
+                pagoVm.Impuesto = impuesto;
+                pagoVm.TotalImp = totalimp;
+                pagoVm.Cambio = cambio;
+
+
+                _context.Pago.Add(pago);
+                _context.SaveChanges();
+
+                TempData["mensaje"] = "Pago registrado correctamente.";
+
+                return RedirectToAction("Index", "Encabezado_", new { encabezadoId = pagoVm.Id_Encabezado_factura });
             }
 
-            // Calcular total 
-            var totalPagar = encabezado.Detalles.Sum(detalle => detalle.Total_Linea);
-            // Calcular impuesto
-            var impuesto = totalPagar * 0.15;
-            // Calcular total más impuesto
-            var totalimp = totalPagar + impuesto;
+        
 
-            // Verificar si el monto recibido es suficiente
-            if (pagoVm.MontoRecibido < totalimp)
-            {
-                ModelState.AddModelError("MontoRecibido", "El monto recibido debe ser mayor o igual al total a pagar más impuesto.");
-                return View(pagoVm);
-            }
-
-            // Calcular el cambio
-            var cambio = pagoVm.MontoRecibido - totalimp;
-
-            // Crear el objeto Pago
-            var pago = new Pago
-            {
-                Id = Guid.NewGuid(),
-                NumeroFactura = encabezado.NumeroFactura, // Asignar el número de factura del encabezado
-                Impuesto = impuesto,
-                TotalPagar = totalPagar,
-                MontoRecibido = pagoVm.MontoRecibido,
-                Cambio = cambio,
-                TotalImp = totalimp,
-                Id_Encabezado_Factura = pagoVm.Id_Encabezado_Factura
-            };
-
-            // Guardar el pago en la base de datos
-            _context.Pago.Add(pago);
-            _context.SaveChanges(); // Guardar los cambios en la base de datos
-
-            // Redirigir al index de Encabezado_ con el encabezadoId
-            return RedirectToAction("Index", "Encabezado_", new { encabezadoId = pagoVm.Id_Encabezado_Factura });
-        }
     }
 }

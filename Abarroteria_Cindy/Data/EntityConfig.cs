@@ -77,9 +77,10 @@ namespace Abarroteria_Cindy.Data
             public void Configure(EntityTypeBuilder<Encabezado_Factura> builder)
             {
                 builder.HasKey(x => x.Id_Encabezado_factura);
-                builder.Property(s => s.Impuesto).HasColumnType("decimal (10,2)").HasColumnName("Impuesto");
+                builder.Property(s => s.NumeroFactura).HasColumnType("Varchar(14)").HasColumnName("NumeroFactura");
                 builder.Property(s => s.RTN).HasColumnType("Varchar(14)").HasColumnName("DNI");
                 builder.HasMany(a => a.Detalles).WithOne(a => a.Encabezado_Factura).HasForeignKey(c => c.Id_Encabezado_Factura);
+                builder.HasMany(a => a.Pagos).WithOne(a => a.Encabezado_Factura).HasForeignKey(c => c.Id_Encabezado_Factura);
             }
 
         }
@@ -169,6 +170,7 @@ namespace Abarroteria_Cindy.Data
                
                 builder.HasKey(x => x.Id);
                 builder.Property(x => x.NumeroFactura).IsRequired();
+
                 builder.Property(x => x.Impuesto).IsRequired();
                 builder.Property(x => x.TotalPagar).IsRequired();
                 builder.Property(x => x.MontoRecibido).IsRequired();

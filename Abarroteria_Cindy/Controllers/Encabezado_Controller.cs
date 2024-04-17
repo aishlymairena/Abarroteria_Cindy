@@ -13,6 +13,8 @@ using System.Text;
 using Microsoft.Win32;
 using Newtonsoft.Json;
 using System.Linq;
+using System;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 
 namespace Abarroteria_Cindy.Controllers
@@ -192,36 +194,45 @@ namespace Abarroteria_Cindy.Controllers
             var encabezadoId = nuevoEncabezado.Id_Encabezado_factura;
             return RedirectToAction("Insertar", "Detalle", new { encabezadoId = encabezadoId });
         }
-AishlyM
 
 
-        private string GenerarNumeroFacturaUnico()
-        {          
-            
-            var random = new Random();
-            var numeroFactura = random.Next(100000, 999999).ToString(); // Número aleatorio de 6 dígitos
-            return numeroFactura;
-        }
+
 
         [HttpGet]
-  public IActionResult Ver(Guid Id_Encabezado_factura)
+        public IActionResult Ver(Guid Id_Encabezado_factura)
         {
-            var registro = _context.Encabezado_Factura
-                          .Where(w => w.Id_Encabezado_factura == Id_Encabezado_factura)
-                          .ProjectToType<EncabezadoVm>()
-                          .FirstOrDefault();
+            var encabezado = _context.Encabezado_Factura
+                                      .Include(e => e.Pagos)
+                                      .FirstOrDefault(w => w.Id_Encabezado_factura == Id_Encabezado_factura);
 
-            return View(registro);
+            if (encabezado == null)
+            {
+                // Manejar el caso en que no se encuentra el encabezado de factura
+                return NotFound();
+            }
 
+            var modelo = new EncabezadoVm
+            {
+                Fecha_Emision = encabezado.Fecha_Emision,
+                NumeroFactura = encabezado.NumeroFactura,
+                RTN = encabezado.RTN,
+                Pagos = encabezado.Pagos.Select(pag => new PagoVm
+                {
+                    Id_Encabezado_factura = pag.Id,
+                    TotalPagar = pag.TotalPagar,
+                    Impuesto = pag.Impuesto,
+                    MontoRecibido = pag.MontoRecibido,
+                    Cambio = pag.Cambio,
+                    TotalImp = pag.TotalImp,
+                    CreatedBy = pag.CreatedBy,
+                    CreatedDate = pag.CreatedDate,
+                    Eliminado = pag.Eliminado
+                }).ToList()
+            };
+
+            return View(modelo);
         }
-
-
-
-
-
-master
     }
-
 }
 
 
