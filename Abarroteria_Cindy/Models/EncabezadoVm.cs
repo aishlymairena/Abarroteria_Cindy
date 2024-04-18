@@ -8,17 +8,14 @@ namespace Abarroteria_Cindy.Models
         public DateTime Fecha_Emision { get; set; }
         public string RTN { get; set; }
         public string NumeroFactura { get; set; }
-        public int Total { get; set; }
-        public int Monto_Entregado { get; set; }
-        public int Cambio { get; set; }
-        public decimal Impuesto { get; set; }
+        
         public EmpleadoVm Empleado { get; set; }
         public Guid Id_Empleado { set; get; }
         public ClienteVm Cliente { get; set; }
         public Guid Id_Cliente { set; get; }
         public CAIVm CAI { get; set; }
         public Guid Id_Cai { set; get; }
-        
+        public List<PagoVm> Pagos { get; set; }
 
     }
 }

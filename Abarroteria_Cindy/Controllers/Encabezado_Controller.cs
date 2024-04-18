@@ -6,9 +6,16 @@ using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+
+using System.Security.Cryptography;
+using System.Text;
+
 using Microsoft.Win32;
 using Newtonsoft.Json;
 using System.Linq;
+using System;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+
 
 namespace Abarroteria_Cindy.Controllers
 {
@@ -81,42 +88,61 @@ namespace Abarroteria_Cindy.Controllers
             ViewBag.EmpleadoList = new SelectList(listaEmpleados, "Id_Empleado", "Nombre");
             ViewBag.ClienteList = new SelectList(listaClientes, "Id_Cliente", "Nombre");
 
-            var rtnPorDefecto = "AYT87P789HIU5A";
+            var caiPorDefecto = "CAI123456789"; // CAI por defecto
             var fechaActual = DateTime.Now;
-            var numeroFactura = $"{fechaActual:yyyyMMdd}-{ObtenerNumeroFactura()}";
+            var numeroFactura = GenerarNumeroFactura(caiPorDefecto);
 
             var factura = new EncabezadoVm
             {
                 Fecha_Emision = fechaActual,
                 NumeroFactura = numeroFactura,
-                RTN = rtnPorDefecto
-
+                RTN = "RTN123456789" // RTN por defecto
             };
 
             return View(factura);
         }
 
-        
-        private string ObtenerNumeroFactura()
+        private string GenerarNumeroFactura(string cai)
         {
-            
-            Random rnd = new Random();
-            return rnd.Next(1000, 9999).ToString(); // Número aleatorio de 4 dígitos
+            var fechaActual = DateTime.Now.ToString("yyyyMMddHHmmss");
+
+            // Concatenar el CAI y la fecha actual
+            var concatenacion = cai + fechaActual;
+
+            // Calcular un hash único a partir de la concatenación del CAI y la fecha actual
+            var hash = GetHashCode(concatenacion);
+
+            // Tomar los últimos 8 caracteres del hash para obtener el número de factura
+            var numeroFactura = hash.Substring(hash.Length - 8);
+
+            return numeroFactura;
         }
+
+        private string GetHashCode(string input)
+        {
+            using (var md5 = MD5.Create())
+            {
+                var inputBytes = Encoding.ASCII.GetBytes(input);
+                var hashBytes = md5.ComputeHash(inputBytes);
+
+                var sb = new StringBuilder();
+                foreach (var b in hashBytes)
+                {
+                    sb.Append(b.ToString("X2"));
+                }
+
+                return sb.ToString();
+            }
+        }
+    
 
         [HttpPost]
         public IActionResult Insertar(EncabezadoVm factura)
         {
-            var listaCAI = _context.CAI.ToList();
             var listaEmpleados = _context.Empleado.ToList();
             var listaClientes = _context.Cliente.ToList();
 
             // Verificar si hay datos en las listas antes de pasarlas al ViewBag
-            if (listaCAI == null)
-            {
-                listaCAI = new List<CAI>();
-            }
-
             if (listaEmpleados == null)
             {
                 listaEmpleados = new List<Empleado>();
@@ -127,13 +153,21 @@ namespace Abarroteria_Cindy.Controllers
                 listaClientes = new List<Cliente>();
             }
 
-            ViewBag.CAIList = new SelectList(listaCAI, "Id_Cai", "Cai");
             ViewBag.EmpleadoList = new SelectList(listaEmpleados, "Id_Empleado", "Nombre");
             ViewBag.ClienteList = new SelectList(listaClientes, "Id_Cliente", "Nombre");
 
-            var rtnPorDefecto = "AYT87P789HIU5A";
+            // Obtener el CAI seleccionado por el usuario
+            var caiSeleccionado = _context.CAI.FirstOrDefault(c => c.Id_Cai == factura.Id_Cai);
+
+            if (caiSeleccionado == null)
+            {
+                // Manejar el caso en que no se seleccione ningún CAI
+                ModelState.AddModelError("Id_Cai", "Debe seleccionar un CAI.");
+                return View(factura);
+            }
+
             var fechaActual = DateTime.Now;
-            var numeroFactura = $"{fechaActual:yyyyMMdd}-{ObtenerNumeroFactura()}";
+            var numeroFactura = GenerarNumeroFactura(caiSeleccionado.Cai);
 
             var sesionJson = HttpContext.Session.GetString("UsuarioObjeto");
             var base64EncodedBytes = System.Convert.FromBase64String(sesionJson);
@@ -143,7 +177,7 @@ namespace Abarroteria_Cindy.Controllers
             {
                 Fecha_Emision = fechaActual,
                 NumeroFactura = numeroFactura,
-                RTN = rtnPorDefecto,
+                RTN = "RTN123456789", // RTN por defecto
                 Id_Empleado = factura.Id_Empleado,
                 Id_Cai = factura.Id_Cai,
                 Id_Cliente = factura.Id_Cliente,
@@ -157,41 +191,48 @@ namespace Abarroteria_Cindy.Controllers
 
             TempData["mensaje"] = "Registrado Correctamente";
 
-            // ID del encabezado creado
             var encabezadoId = nuevoEncabezado.Id_Encabezado_factura;
-
-            //esto pasa al ID del encabezado a la vista Insertar de Detalle
             return RedirectToAction("Insertar", "Detalle", new { encabezadoId = encabezadoId });
         }
 
 
-        private string GenerarNumeroFacturaUnico()
-        {          
-            
-            var random = new Random();
-            var numeroFactura = random.Next(100000, 999999).ToString(); // Número aleatorio de 6 dígitos
-            return numeroFactura;
-        }
+
 
         [HttpGet]
-  public IActionResult Ver(Guid Id_Encabezado_factura)
+        public IActionResult Ver(Guid Id_Encabezado_factura)
         {
-            var registro = _context.Encabezado_Factura
-                          .Where(w => w.Id_Encabezado_factura == Id_Encabezado_factura)
-                          .ProjectToType<EncabezadoVm>()
-                          .FirstOrDefault();
+            var encabezado = _context.Encabezado_Factura
+                                      .Include(e => e.Pagos)
+                                      .FirstOrDefault(w => w.Id_Encabezado_factura == Id_Encabezado_factura);
 
-            return View(registro);
+            if (encabezado == null)
+            {
+                // Manejar el caso en que no se encuentra el encabezado de factura
+                return NotFound();
+            }
 
+            var modelo = new EncabezadoVm
+            {
+                Fecha_Emision = encabezado.Fecha_Emision,
+                NumeroFactura = encabezado.NumeroFactura,
+                RTN = encabezado.RTN,
+                Pagos = encabezado.Pagos.Select(pag => new PagoVm
+                {
+                    Id_Encabezado_factura = pag.Id,
+                    TotalPagar = pag.TotalPagar,
+                    Impuesto = pag.Impuesto,
+                    MontoRecibido = pag.MontoRecibido,
+                    Cambio = pag.Cambio,
+                    TotalImp = pag.TotalImp,
+                    CreatedBy = pag.CreatedBy,
+                    CreatedDate = pag.CreatedDate,
+                    Eliminado = pag.Eliminado
+                }).ToList()
+            };
+
+            return View(modelo);
         }
-
-
-
-
-
     }
-
 }
-
 
 

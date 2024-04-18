@@ -11,6 +11,9 @@ namespace Abarroteria_Cindy.Data.Entidades
         public double MontoRecibido { get; set; }
         public double Cambio { get; set; }
         public double TotalImp { get; set; }
+        public Encabezado_Factura Encabezado_Factura { get; set; }
+        public Guid Id_Encabezado_Factura { set; get; }
+
 
         public Guid CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
